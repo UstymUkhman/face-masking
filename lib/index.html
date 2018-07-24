@@ -20,51 +20,30 @@
         margin: 0;
       }
 
-      canvas {
-        position: absolute;
-        margin: auto;
-
-        /*height: 45%;
-        width: 80%;*/
-
-        bottom: 0;
-        right: 0;
-        left: 0;
-        top: 0;
-      }
-
-      video {
-        position: absolute;
-        margin: auto;
-
-        opacity: 0;
-
-        bottom: 0;
-        right: 0;
-        left: 0;
-        top: 0;
-
-        /*-webkit-transform: scaleX(-1);
-        -o-transform: scaleX(-1);
-        transform: scaleX(-1);
-        -ms-filter: fliph;
-        filter: fliph;*/
-      }
-
-      /*#overlay {
+      video, canvas {
         -webkit-transform: scaleX(-1);
         -o-transform: scaleX(-1);
         transform: scaleX(-1);
-
-        position: absolute;
         -ms-filter: fliph;
         filter: fliph;
-      }*/
+
+        position: absolute;
+        margin: auto;
+
+        bottom: 0;
+        right: 0;
+        left: 0;
+        top: 0;
+      }
+
+      /* video {
+        opacity: 0;
+      } */
     </style>
   </head>
 
   <body>
-    <video src="./assets/video.webm" id="video" preload muted loop></video>
+    <video id="video"></video>
     <canvas id="overlay"></canvas>
 
     <script type="text/javascript">
