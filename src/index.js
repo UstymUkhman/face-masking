@@ -39,8 +39,8 @@ export default class FaceTracking {
     this.camera.position.z = 200
     this.camera.updateProjectionMatrix()
 
-    // this.controls = new THREE.OrbitControls(this.camera)
-    // this.controls.update()
+    this.controls = new THREE.OrbitControls(this.camera)
+    this.controls.update()
 
     this.renderer.setClearColor(0x000000)
     this.renderer.setSize(this.width, this.height)
@@ -95,7 +95,7 @@ export default class FaceTracking {
       }
     }
 
-    // this.controls.update()
+    this.controls.update()
     this.renderer.render(this.scene, this.camera)
     this.frame = requestAnimationFrame(this.render.bind(this))
   }
@@ -103,11 +103,50 @@ export default class FaceTracking {
   drawCurrentPosition (points) {
     for (let i = 0, p = 0; i < FACE_COORDS; i += 3, p++) {
       const x = points[p][0] * this.widthRatio - 100
-      const y = points[p][1] * this.heightRatio - 100
+      const y = points[p][1] * -this.heightRatio + 100
+
+      // eyes
+      let z = 2.5
+
+      // shape
+      if (p < 15) {
+        let v = Math.abs(p - 7)
+        z = 7 - (v < 2 ? v + 2.5 : v < 4 ? v / 0.4 : v < 6 ? v / 0.45 : 12)
+      }
+
+      // eyebrows
+      else if (p < 23) {
+        z = 4
+      }
+
+      // nose shape
+      else if (p > 32 & p < 41) {
+        z = 3.5
+      }
+
+      // lips
+      else if (p > 40 & p < 56) {
+        z = (p === 42 || p === 43) ? 5.5 : 5
+      }
+
+      // mouth
+      else if (p > 55 & p < 62) {
+        z = 4
+      }
+
+      // eye balls
+      else if (p === 27 || p === 32) {
+        z = 3
+      }
+
+      // nose tip
+      else if (p === 62) {
+        z = 6.5
+      }
 
       this.facePoints.geometry.attributes.position.array[i] = x
-      this.facePoints.geometry.attributes.position.array[i + 1] = -y
-      this.facePoints.geometry.attributes.position.array[i + 2] = 0
+      this.facePoints.geometry.attributes.position.array[i + 1] = y
+      this.facePoints.geometry.attributes.position.array[i + 2] = z
     }
 
     this.facePoints.geometry.attributes.position.needsUpdate = true
