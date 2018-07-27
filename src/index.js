@@ -63,18 +63,21 @@ export default class FaceTracking {
   initializeFaceGeometry () {
     const faceGeometry = new THREE.BufferGeometry()
 
-    faceGeometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(FACE_COORDS), 3));
-    this.facePoints = new THREE.Points(faceGeometry, new THREE.PointsMaterial({ color: 0x00CC00 }));
+    faceGeometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(FACE_COORDS), 3))
+    this.facePoints = new THREE.Points(faceGeometry, new THREE.PointsMaterial({ color: 0x00CC00 }))
 
     this.rightEyebrow = this.createLineGeometry(4)
     this.leftEyebrow = this.createLineGeometry(4)
 
     this.faceShape = this.createLineGeometry(15)
     this.lipsShape = this.createLineGeometry(13)
-
     this.mouthShape = this.createLineGeometry(9)
+
     this.noseShape = this.createLineGeometry(9)
-    this.noseSpine = this.createLineGeometry(3)
+    this.noseSpine = this.createLineGeometry(4)
+
+    this.rightEye = this.createLineGeometry(9)
+    this.leftEye = this.createLineGeometry(9)
 
     this.scene.add(this.rightEyebrow)
     this.scene.add(this.leftEyebrow)
@@ -84,8 +87,12 @@ export default class FaceTracking {
 
     this.scene.add(this.mouthShape)
     this.scene.add(this.lipsShape)
+
     this.scene.add(this.noseShape)
     this.scene.add(this.noseSpine)
+
+    this.scene.add(this.rightEye)
+    this.scene.add(this.leftEye)
   }
 
   createLineGeometry (points) {
@@ -147,14 +154,129 @@ export default class FaceTracking {
     this.frame = requestAnimationFrame(this.render.bind(this))
   }
 
+  drawEyes (point, x, y, z) {
+    const leftEye = this.leftEye.geometry.attributes.position.array
+    const rightEye = this.rightEye.geometry.attributes.position.array
+
+    switch (point) {
+      case 23:
+        rightEye[0] = x
+        rightEye[1] = y
+        rightEye[2] = z
+      break;
+
+      case 24:
+        rightEye[6] = x
+        rightEye[7] = y
+        rightEye[8] = z
+      break;
+
+      case 25:
+        rightEye[12] = x
+        rightEye[13] = y
+        rightEye[14] = z
+      break;
+
+      case 26:
+        rightEye[18] = x
+        rightEye[19] = y
+        rightEye[20] = z
+      break;
+
+      case 28:
+        leftEye[0] = x
+        leftEye[1] = y
+        leftEye[2] = z
+      break;
+
+      case 29:
+        leftEye[6] = x
+        leftEye[7] = y
+        leftEye[8] = z
+      break;
+
+      case 30:
+        leftEye[12] = x
+        leftEye[13] = y
+        leftEye[14] = z
+      break;
+
+      case 31:
+        leftEye[18] = x
+        leftEye[19] = y
+        leftEye[20] = z
+      break;
+
+      case 63:
+        rightEye[3] = x
+        rightEye[4] = y
+        rightEye[5] = z
+      break;
+
+      case 64:
+        rightEye[9] = x
+        rightEye[10] = y
+        rightEye[11] = z
+      break;
+
+      case 65:
+        rightEye[15] = x
+        rightEye[16] = y
+        rightEye[17] = z
+      break;
+
+      case 66:
+        rightEye[21] = x
+        rightEye[22] = y
+        rightEye[23] = z
+
+        rightEye[24] = rightEye[0]
+        rightEye[25] = rightEye[1]
+        rightEye[26] = rightEye[2]
+      break;
+
+      case 67:
+        leftEye[3] = x
+        leftEye[4] = y
+        leftEye[5] = z
+      break;
+
+      case 68:
+        leftEye[9] = x
+        leftEye[10] = y
+        leftEye[11] = z
+      break;
+
+      case 69:
+        leftEye[15] = x
+        leftEye[16] = y
+        leftEye[17] = z
+      break;
+
+      case 70:
+        leftEye[21] = x
+        leftEye[22] = y
+        leftEye[23] = z
+
+        leftEye[24] = leftEye[0]
+        leftEye[25] = leftEye[1]
+        leftEye[26] = leftEye[2]
+      break;
+    }
+
+    this.leftEye.geometry.attributes.position.needsUpdate = true
+    this.rightEye.geometry.attributes.position.needsUpdate = true
+  }
+
   drawCurrentPosition (points) {
-    const lipsShape = this.lipsShape.geometry.attributes.position.array
     const faceShape = this.faceShape.geometry.attributes.position.array
 
     const noseSpine = this.noseSpine.geometry.attributes.position.array
     const noseShape = this.noseShape.geometry.attributes.position.array
 
+    const lipsShape = this.lipsShape.geometry.attributes.position.array
     const mouthShape = this.mouthShape.geometry.attributes.position.array
+
     const leftEyebrow = this.leftEyebrow.geometry.attributes.position.array
     const rightEyebrow = this.rightEyebrow.geometry.attributes.position.array
 
@@ -168,6 +290,10 @@ export default class FaceTracking {
 
       // eyes
       let z = 2.5
+
+      if ((p > 22 && p < 32) || (p > 62 && p < 71)) {
+        this.drawEyes(p, x, y, z)        
+      }
 
       // shape
       if (p < 15) {
@@ -196,7 +322,7 @@ export default class FaceTracking {
 
       // nose shape
       else if (p > 32 && p < 41) {
-        z = 3.5
+        z = p === 37 ? 4.5 : 3.5
 
         if (p === 33) {
           noseSpine[0] = x
@@ -222,6 +348,8 @@ export default class FaceTracking {
         z = 5
 
         if (p === 41) {
+          z = 5.5
+
           noseSpine[3] = x
           noseSpine[4] = y
           noseSpine[5] = z
@@ -272,11 +400,15 @@ export default class FaceTracking {
 
       // nose tip
       else if (p === 62) {
-        z = 7.25
+        z = 8.25
 
         noseSpine[6] = x
         noseSpine[7] = y
         noseSpine[8] = z
+
+        noseSpine[9] = noseShape[12]
+        noseSpine[10] = noseShape[13]
+        noseSpine[11] = noseShape[14]
       }
 
       this.facePoints.geometry.attributes.position.array[iX] = x
@@ -292,16 +424,17 @@ export default class FaceTracking {
     mouthShape[25] = mouthShape[1]
     mouthShape[26] = mouthShape[2]
 
-    this.rightEyebrow.geometry.attributes.position.needsUpdate = true
-    this.leftEyebrow.geometry.attributes.position.needsUpdate = true
-
     this.facePoints.geometry.attributes.position.needsUpdate = true
     this.faceShape.geometry.attributes.position.needsUpdate = true
 
-    this.mouthShape.geometry.attributes.position.needsUpdate = true
-    this.noseShape.geometry.attributes.position.needsUpdate = true
     this.noseSpine.geometry.attributes.position.needsUpdate = true
+    this.noseShape.geometry.attributes.position.needsUpdate = true
+
     this.lipsShape.geometry.attributes.position.needsUpdate = true
+    this.mouthShape.geometry.attributes.position.needsUpdate = true
+
+    this.leftEyebrow.geometry.attributes.position.needsUpdate = true
+    this.rightEyebrow.geometry.attributes.position.needsUpdate = true
   }
 
   setVideoSize () {
