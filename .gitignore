@@ -27,10 +27,9 @@ build/Release
 node_modules
 
 # Compiled source files
-lib/*.js
 lib/*.map
+lib/*.min.js
 lib/assets/*
-!lib/*.min.js
 !lib/assets/*.webm
 
 # Remove some common IDE working directories

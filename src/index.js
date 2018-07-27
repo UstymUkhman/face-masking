@@ -17,15 +17,15 @@ export default class FaceTracking {
   startExperiment () {
     this.createStats()
     this.setVideoSize()
-    // this.createCameraTracking()
+    this.createCameraTracking()
     this.createWebGLEnvironment()
     this.initializeFaceGeometry()
 
     // video
-    this.tracker = new clm.tracker()
-    this.tracker.init()
-    this.tracker.start(this.video)
-    this.video.play()
+    // this.tracker = new clm.tracker()
+    // this.tracker.init()
+    // this.tracker.start(this.video)
+    // this.video.play()
     // 
 
     this.onResize()
