@@ -298,7 +298,18 @@ export default class FaceTracking {
       // shape
       if (p < 15) {
         let v = Math.abs(p - 7)
-        z = 7 - (v < 2 ? v + 2.5 : v < 4 ? v / 0.4 : v < 6 ? v / 0.45 : 12)
+        // z = 7 - (v < 2 ? v + 2.5 : v < 4 ? v / 0.4 : v < 6 ? v / 0.45 : 12)
+
+        switch (Math.abs(p - 7)) {
+          case 0: z = 4.5; break;
+          case 1: z = 3.75; break;
+          case 2: z = 1.5; break;
+          case 3: z = -1.5; break;
+          case 4: z = -3.5; break;
+          case 5: z = -4.5; break;
+          case 6: z = -4.75; break;
+          case 7: z = -5; break;
+        }
 
         faceShape[iX] = x
         faceShape[iY] = y
