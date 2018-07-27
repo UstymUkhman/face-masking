@@ -29,7 +29,9 @@ node_modules
 # Compiled source files
 lib/*.js
 lib/*.map
-lib/assets/*.mp4
+lib/assets/*
+!lib/*.min.js
+!lib/assets/*.webm
 
 # Remove some common IDE working directories
 .idea
