@@ -1,3 +1,9 @@
-# face-tracking #
+# face-tracking.github.io #
 
-*npm run build && npm run dev*
+`yarn`
+
+`yarn start`
+
+`yarn build`
+
+`yarn server`
