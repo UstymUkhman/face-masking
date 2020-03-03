@@ -1,3 +1,6 @@
-import Playground from '@/Playground';
+import FaceTracking from '@/FaceTracking';
 
-export default new Playground();
+export default new FaceTracking(
+  document.getElementById('video'),
+  document.getElementById('canvas')
+);

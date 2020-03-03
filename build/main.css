@@ -13,11 +13,11 @@ html, body {
   font-weight: 400;
   font-size: 16px;
 
-  background-color: #ffffff;
+  background-color: #000000;
   letter-spacing: normal;
   line-height: normal;
   overflow: hidden;
-  color: #000000;
+  color: #ffffff;
 
   height: 100%;
   width: 100%;
@@ -29,16 +29,18 @@ html, body {
   top: 0;
 }
 
-canvas {
+video, canvas {
   position: absolute;
   display: block;
 
   height: 100%;
   width: 100%;
 
+  margin: auto;
   padding: 0;
-  margin: 0;
 
+  bottom: 0;
+  right: 0;
   left: 0;
   top: 0;
 }
