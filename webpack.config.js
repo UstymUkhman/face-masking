@@ -16,6 +16,8 @@ module.exports = {
   entry: path.resolve('./src/main.js'),
 
   module: {
+    noParse: /build\/clmtrackr/,
+
     rules: [{
       enforce: 'pre',
       test: /(\.js)$/,

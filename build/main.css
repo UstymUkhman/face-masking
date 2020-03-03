@@ -30,8 +30,14 @@ html, body {
 }
 
 video, canvas {
+  -webkit-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  transform: scaleX(-1);
+
   position: absolute;
+  -ms-filter: fliph;
   display: block;
+  filter: fliph;
 
   height: 100%;
   width: 100%;
