@@ -7,18 +7,18 @@ import { Scene } from '@three/scenes/Scene';
 import Tracker from '@/Tracker';
 
 export default class FaceTracking {
-  constructor (video, canvas) {
+  constructor (start, video, canvas) {
     this.canvas = canvas;
     this.video = video;
-    this.setSize();
+    this.start = start;
 
+    this.setSize();
     this.createScene();
     this.createCamera();
-
     this.createRenderer();
+
     this.createControls();
     this.createTracker();
-
     this.createEvents();
     this.createStats();
 
@@ -26,8 +26,8 @@ export default class FaceTracking {
   }
 
   setSize () {
-    this.width = window.innerWidth / 10 * 6;
-    this.height = this.width / 4 * 3;
+    this.height = window.innerHeight * 0.9;
+    this.width = this.height / 3 * 4;
 
     this.video.width = this.width;
     this.video.height = this.height;
@@ -61,23 +61,25 @@ export default class FaceTracking {
 
   createTracker () {
     this.tracker = new Tracker(
-      this.scene, this.video,
-      this.canvas.getContext('2d'), {
+      this.video, this.canvas, this.scene, {
         height: this.height,
         width: this.width
       }
     );
   }
 
-  createEvents () {
-    this._onResize = this.onResize.bind(this);
-    window.addEventListener('resize', this._onResize, false);
-  }
-
   createStats () {
     this.stats = new Stats();
     this.stats.showPanel(0);
     document.body.appendChild(this.stats.domElement);
+  }
+
+  createEvents () {
+    this._onResize = this.onResize.bind(this);
+    this._onStart = this.tracker.start.bind(this.tracker);
+
+    window.addEventListener('resize', this._onResize, false);
+    this.start.addEventListener('click', this._onStart, false);
   }
 
   render () {
@@ -100,7 +102,9 @@ export default class FaceTracking {
   }
 
   destroy () {
+    this.start.removeEventListener('click', this._onStart, false);
     window.removeEventListener('resize', this._onResize, false);
+
     document.body.removeChild(this.renderer.domElement);
     document.body.removeChild(this.stats.domElement);
 

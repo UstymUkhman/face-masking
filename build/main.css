@@ -13,11 +13,11 @@ html, body {
   font-weight: 400;
   font-size: 16px;
 
-  background-color: #000000;
+  background-color: #e1e1e1;
   letter-spacing: normal;
   line-height: normal;
   overflow: hidden;
-  color: #ffffff;
+  color: #000000;
 
   height: 100%;
   width: 100%;
@@ -39,9 +39,6 @@ video, canvas {
   display: block;
   filter: fliph;
 
-  height: 100%;
-  width: 100%;
-
   margin: auto;
   padding: 0;
 
@@ -49,4 +46,62 @@ video, canvas {
   right: 0;
   left: 0;
   top: 0;
+}
+
+div > canvas {
+  -webkit-transform: none;
+  -o-transform: none;
+  transform: none;
+
+  position: relative;
+  -ms-filter: none;
+  filter: none;
+}
+
+div.start-container {
+  transition: opacity 0.5s;
+  position: absolute;
+  display: block;
+  margin: auto;
+
+  height: 35px;
+  width: 125px;
+
+  bottom: 0;
+  right: 0;
+  left: 0;
+  top: 0;
+}
+
+div.start-container.hidden {
+  pointer-events: none;;
+  opacity: 0;
+}
+
+button {
+  transition: background-color 0.3s, color 0.3s;
+  font-family: 'Roboto', sans-serif;
+  background-color: #000000;
+  border: 1px solid #e1e1e1;
+  
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  color: #e1e1e1;
+  cursor: pointer;
+  display: block;
+  
+  height: 35px;
+  width: 125px;
+  
+  outline: 0;
+  z-index: 1;
+
+  padding: 0;
+  margin: 0;
+}
+
+button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #000000;
 }

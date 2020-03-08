@@ -1,28 +1,35 @@
-import { LineBasicMaterial } from '@three/materials/LineBasicMaterial';
-import { PointsMaterial } from '@three/materials/PointsMaterial';
-import { BufferAttribute } from '@three/core/BufferAttribute';
-import { BufferGeometry } from '@three/core/BufferGeometry';
+// import { LineBasicMaterial } from '@three/materials/LineBasicMaterial';
+// import { PointsMaterial } from '@three/materials/PointsMaterial';
+// import { BufferAttribute } from '@three/core/BufferAttribute';
+// import { BufferGeometry } from '@three/core/BufferGeometry';
 
-import { Points } from '@three/objects/Points';
-import { Vector3 } from '@three/math/Vector3';
+// import { Points } from '@three/objects/Points';
+// import { Vector3 } from '@three/math/Vector3';
 import clm from 'clmtrackr/build/clmtrackr';
-import { Line } from '@three/objects/Line';
+// import { Line } from '@three/objects/Line';
 
-const WHITE = 0xFFFFFF;
-const GREEN = 0x00CC00;
+// const WHITE = 0xFFFFFF;
+// const GREEN = 0x00CC00;
 
-const FACE_VERTICES = 71;
-const FACE_COORDS = FACE_VERTICES * 3;
+// const FACE_VERTICES = 71;
+// const FACE_COORDS = FACE_VERTICES * 3;
 
 export default class Tracker {
-  constructor (scene, video, context, { width, height }) {
-    this.scene = scene;
+  constructor (video, canvas, scene, { width, height }) {
+    this.canvas = canvas;
     this.video = video;
-    this.context = context;
+    this.scene = scene;
 
     this.createTracker();
-    this.createFaceGeometry();
+    // this.createFaceGeometry();
     this.resize(width, height);
+    this.context = this.canvas.getContext('2d');
+  }
+
+  start (event) {
+    const container = event.target.parentElement;
+    container.classList.add('hidden');
+    this.video.play();
   }
 
   createTracker () {
@@ -56,27 +63,14 @@ export default class Tracker {
 
   gumSuccess (stream) {
     this.video.srcObject = stream;
-
-    this.video.onloadedmetadata = () => {
-      this.resize(this.width, this.height);
-      this.createStartButton();
-    };
+    this.video.onloadedmetadata = this.resize.call(this, this.width, this.height);
   }
 
   gumFail () {
     console.error('D: Camera stream failed...');
   }
 
-  createStartButton () {
-    document.addEventListener('click', this.playVideo.bind(this));
-  }
-
-  playVideo () {
-    document.removeEventListener('click', this.playVideo.bind(this));
-    this.video.play();
-  }
-
-  createFaceGeometry () {
+  /* createFaceGeometry () {
     const faceGeometry = new BufferGeometry();
 
     faceGeometry.setAttribute('position', new BufferAttribute(new Float32Array(FACE_COORDS), 3));
@@ -122,7 +116,7 @@ export default class Tracker {
         opacity: 0.5
       })
     );
-  }
+  } */
 
   render () {
     if (this.video.readyState === this.video.HAVE_ENOUGH_DATA) {
@@ -130,12 +124,13 @@ export default class Tracker {
       const position = this.tracker.getCurrentPosition();
 
       if (position) {
-        this.drawCurrentPosition(position);
+        this.tracker.draw(this.canvas);
+        // this.drawCurrentPosition(position);
       }
     }
   }
 
-  drawCurrentPosition (points) {
+  /* drawCurrentPosition (points) {
     const faceShape = this.faceShape.geometry.attributes.position.array;
 
     const noseSpine = this.noseSpine.geometry.attributes.position.array;
@@ -421,7 +416,7 @@ export default class Tracker {
 
     this.leftEye.geometry.attributes.position.needsUpdate = true;
     this.rightEye.geometry.attributes.position.needsUpdate = true;
-  }
+  } */
 
   resize (width, height) {
     this.width = width;
@@ -430,9 +425,6 @@ export default class Tracker {
     this.tracker.stop();
     this.tracker.reset();
     this.tracker.start(this.video);
-
-    this.widthRatio = 200 / this.width;
-    this.heightRatio = 160 / this.height;
   }
 
   destroy () {
