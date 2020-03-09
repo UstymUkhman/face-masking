@@ -27,8 +27,6 @@ export default class FaceTracking {
     this.createTracker();
     this.createEvents();
     this.createStats();
-
-    this.video.oncanplay = this.init.bind(this);
   }
 
   init () {
@@ -39,18 +37,8 @@ export default class FaceTracking {
       new PlaneGeometry(this.width, this.height, 1, 1),
       new MeshBasicMaterial({ map: texture })
     ));
-  }
 
-  setSize () {
-    this.height = window.innerHeight * 0.9;
-    this.width = this.height / 3 * 4;
-
-    this.video.width = this.width;
-    this.video.height = this.height;
-
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-    this.ratio = this.width / this.height;
+    this.start.parentElement.classList.add('visible');
   }
 
   createScene () {
@@ -70,7 +58,7 @@ export default class FaceTracking {
     this.renderer.setPixelRatio(window.devicePixelRatio || 1);
     this.renderer.setSize(this.width, this.height);
 
-    document.body.appendChild(this.renderer.domElement);
+    // document.body.appendChild(this.renderer.domElement);
 
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(new RenderPass(this.scene, this.camera));
@@ -96,10 +84,12 @@ export default class FaceTracking {
   }
 
   createEvents () {
+    this._init = this.init.bind(this);
     this._onStart = this.onStart.bind(this);
     this._onResize = this.onResize.bind(this);
 
     window.addEventListener('resize', this._onResize, false);
+    this.video.addEventListener('canplay', this._init, false);
     this.start.addEventListener('click', this._onStart, false);
   }
 
@@ -112,13 +102,28 @@ export default class FaceTracking {
     this.stats.end();
   }
 
-  onStart (event) {
+  async onStart (event) {
     this.start.removeEventListener('click', this._onStart, false);
     const container = event.target.parentElement;
     container.classList.remove('visible');
-
     this.video.play();
+
     requestAnimationFrame(this.render.bind(this));
+  }
+
+  setSize () {
+    // this.height = window.innerHeight * 0.9;
+    // this.width = this.height / 3 * 4;
+
+    this.width = 640;
+    this.height = 480;
+
+    this.video.width = this.width;
+    this.video.height = this.height;
+
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+    this.ratio = this.width / this.height;
   }
 
   onResize () {

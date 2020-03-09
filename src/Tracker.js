@@ -3,7 +3,7 @@ import { ShaderPass } from '@postprocessing/ShaderPass';
 
 import { Texture } from '@three/textures/Texture';
 import { LinearFilter } from '@three/constants';
-import clm from 'clmtrackr/build/clmtrackr';
+import * as FaceAPI from 'face-api.js';
 
 import vertVideo from '@/glsl/video.vert';
 import fragVideo from '@/glsl/video.frag';
@@ -16,6 +16,45 @@ export default class Tracker {
     this.createTracker();
     this.resize(width, height);
     this.context = this.canvas.getContext('2d');
+  }
+
+  async createTracker () {
+    this.options = new FaceAPI.TinyFaceDetectorOptions({
+      scoreThreshold: 0.1,
+      inputSize: 128
+    });
+
+    await FaceAPI.nets.tinyFaceDetector.load('/models');
+
+    navigator.getUserMedia = navigator.getUserMedia ||
+                             navigator.msGetUserMedia ||
+                             navigator.mozGetUserMedia ||
+                             navigator.webkitGetUserMedia;
+
+    if (navigator.mediaDevices) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(this.gumSuccess.bind(this))
+        .catch(this.gumFail.bind(this));
+
+    } else if (navigator.getUserMedia) {
+      navigator.getUserMedia({ video: true },
+        this.gumSuccess.bind(this),
+        this.gumFail.bind(this)
+      );
+
+    } else {
+      this.gumFail();
+    }
+  }
+
+  gumSuccess (stream) {
+    this.video.srcObject = stream;
+    this.video.onloadedmetadata = this.resize.call(this, this.width, this.height);
+  }
+
+  gumFail () {
+    console.error('D: Camera stream failed...');
   }
 
   createShader () {
@@ -44,69 +83,26 @@ export default class Tracker {
     return this.texture;
   }
 
-  createTracker () {
-    navigator.getUserMedia = navigator.getUserMedia ||
-                             navigator.msGetUserMedia ||
-                             navigator.mozGetUserMedia ||
-                             navigator.webkitGetUserMedia;
-
-    // eslint-disable-next-line new-cap
-    this.tracker = new clm.tracker();
-
-    this.tracker.init();
-    this.tracker.start(this.video);
-
-    if (navigator.mediaDevices) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(this.gumSuccess.bind(this))
-        .catch(this.gumFail.bind(this));
-
-    } else if (navigator.getUserMedia) {
-      navigator.getUserMedia({ video: true },
-        this.gumSuccess.bind(this),
-        this.gumFail.bind(this)
-      );
-
-    } else {
-      this.gumFail();
-    }
-  }
-
-  gumSuccess (stream) {
-    this.video.srcObject = stream;
-    this.video.onloadedmetadata = this.resize.call(this, this.width, this.height);
-  }
-
-  gumFail () {
-    console.error('D: Camera stream failed...');
-  }
-
   render (delta) {
-    if (this.video.readyState === this.video.HAVE_ENOUGH_DATA) {
-      this.context.clearRect(0, 0, this.width, this.height);
-      // const position = this.tracker.getCurrentPosition();
+    FaceAPI.detectSingleFace(this.video, this.options)
+      .then((result) => {
+        if (result) {
+          const dimensions = FaceAPI.matchDimensions(this.canvas, this.video, true);
 
-      this.shader.material.uniforms.time.value = delta;
-      this.texture.needsUpdate = true;
+          FaceAPI.draw.drawDetections(
+            this.canvas, FaceAPI.resizeResults(result, dimensions)
+          );
+        }
+      });
 
-      // if (position) {
-      //   this.tracker.draw(this.canvas);
-      // }
-    }
+    this.shader.material.uniforms.time.value = delta;
+    this.texture.needsUpdate = true;
   }
 
   resize (width, height) {
-    this.width = width;
     this.height = height;
-
-    this.tracker.stop();
-    this.tracker.reset();
-    this.tracker.start(this.video);
+    this.width = width;
   }
 
-  destroy () {
-    console.log(this.tracker);
-    // this.tracker.destroy();
-  }
+  destroy () { }
 }
