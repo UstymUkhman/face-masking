@@ -60,12 +60,14 @@ div > canvas {
 
 div.start-container {
   transition: opacity 0.5s;
+  pointer-events: none;
   position: absolute;
   display: block;
   margin: auto;
 
   height: 35px;
   width: 125px;
+  opacity: 0;
 
   bottom: 0;
   right: 0;
@@ -73,9 +75,10 @@ div.start-container {
   top: 0;
 }
 
-div.start-container.hidden {
-  pointer-events: none;;
-  opacity: 0;
+div.start-container.visible {
+  transition-delay: 0.5s;
+  pointer-events: all;
+  opacity: 1;
 }
 
 button {

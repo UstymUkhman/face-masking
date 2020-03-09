@@ -1,9 +1,16 @@
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { MeshBasicMaterial } from '@three/materials/MeshBasicMaterial';
 import { PerspectiveCamera } from '@three/cameras/PerspectiveCamera';
+import { EffectComposer } from '@postprocessing/EffectComposer';
+import { PlaneGeometry } from '@three/geometries/PlaneGeometry';
 import { WebGLRenderer } from '@three/renderers/WebGLRenderer';
 
+import { RenderPass } from '@postprocessing/RenderPass';
+import { ShaderPass } from '@postprocessing/ShaderPass';
 import Stats from 'three/examples/js/libs/stats.min';
+import { CopyShader } from '@shaders/CopyShader';
+
 import { Scene } from '@three/scenes/Scene';
+import { Mesh } from '@three/objects/Mesh';
 import Tracker from '@/Tracker';
 
 export default class FaceTracking {
@@ -17,12 +24,21 @@ export default class FaceTracking {
     this.createCamera();
     this.createRenderer();
 
-    this.createControls();
     this.createTracker();
     this.createEvents();
     this.createStats();
 
-    this.raf = requestAnimationFrame(this.render.bind(this));
+    this.video.oncanplay = this.init.bind(this);
+  }
+
+  init () {
+    const texture = this.tracker.createVideoGeometry();
+    this.start.parentElement.classList.add('visible');
+
+    this.scene.add(new Mesh(
+      new PlaneGeometry(this.width, this.height, 1, 1),
+      new MeshBasicMaterial({ map: texture })
+    ));
   }
 
   setSize () {
@@ -43,7 +59,10 @@ export default class FaceTracking {
 
   createCamera () {
     this.camera = new PerspectiveCamera(45, this.ratio, 0.1, 1000);
-    this.camera.position.set(0, 0, 200);
+    const z = Math.round(this.height / 0.8275862);
+
+    this.camera.position.set(0, 0, z);
+    window.camera = this.camera;
   }
 
   createRenderer () {
@@ -52,44 +71,54 @@ export default class FaceTracking {
     this.renderer.setSize(this.width, this.height);
 
     document.body.appendChild(this.renderer.domElement);
-  }
 
-  createControls () {
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.update();
+    this.composer = new EffectComposer(this.renderer);
+    this.composer.addPass(new RenderPass(this.scene, this.camera));
   }
 
   createTracker () {
+    this.composer.addPass(new ShaderPass(CopyShader));
+
     this.tracker = new Tracker(
-      this.video, this.canvas, this.scene, {
+      this.video, this.canvas, {
         height: this.height,
         width: this.width
       }
     );
+
+    const shader = this.tracker.createShader();
+    this.composer.addPass(shader);
   }
 
   createStats () {
     this.stats = new Stats();
-    this.stats.showPanel(0);
     document.body.appendChild(this.stats.domElement);
   }
 
   createEvents () {
+    this._onStart = this.onStart.bind(this);
     this._onResize = this.onResize.bind(this);
-    this._onStart = this.tracker.start.bind(this.tracker);
 
     window.addEventListener('resize', this._onResize, false);
     this.start.addEventListener('click', this._onStart, false);
   }
 
-  render () {
+  render (delta) {
     this.stats.begin();
-    this.tracker.render();
-    this.controls.update();
+    this.composer.render();
+    this.tracker.render(delta);
 
     this.raf = requestAnimationFrame(this.render.bind(this));
-    this.renderer.render(this.scene, this.camera);
     this.stats.end();
+  }
+
+  onStart (event) {
+    this.start.removeEventListener('click', this._onStart, false);
+    const container = event.target.parentElement;
+    container.classList.remove('visible');
+
+    this.video.play();
+    requestAnimationFrame(this.render.bind(this));
   }
 
   onResize () {
@@ -111,7 +140,6 @@ export default class FaceTracking {
     cancelAnimationFrame(this.raf);
     this.tracker.destroy();
 
-    delete this.controls;
     delete this.renderer;
     delete this.tracker;
 
