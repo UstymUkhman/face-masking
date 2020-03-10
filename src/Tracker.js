@@ -15,7 +15,6 @@ export default class Tracker {
 
     this.createTracker();
     this.resize(width, height);
-    this.context = this.canvas.getContext('2d');
   }
 
   async createTracker () {
@@ -24,7 +23,7 @@ export default class Tracker {
       inputSize: 128
     });
 
-    await FaceAPI.nets.tinyFaceDetector.load('/models');
+    await FaceAPI.nets.tinyFaceDetector.load('./models');
 
     navigator.getUserMedia = navigator.getUserMedia ||
                              navigator.msGetUserMedia ||
@@ -65,7 +64,11 @@ export default class Tracker {
 
         uniforms: {
           tDiffuse: { type: 't', value: null },
-          time: { type: 'f', value: 0.0 }
+          // time: { type: 'f', value: 0.0 }
+          bottom: { type: 'f', value: 0.8 },
+          right: { type: 'f', value: 0.8 },
+          left: { type: 'f', value: 0.0 },
+          top: { type: 'f', value: 0.0 }
         }
       })
     );
@@ -87,15 +90,22 @@ export default class Tracker {
     FaceAPI.detectSingleFace(this.video, this.options)
       .then((result) => {
         if (result) {
-          const dimensions = FaceAPI.matchDimensions(this.canvas, this.video, true);
+          const { bottom, right, left, top } = result.relativeBox;
 
-          FaceAPI.draw.drawDetections(
-            this.canvas, FaceAPI.resizeResults(result, dimensions)
-          );
+          // const dimensions = FaceAPI.matchDimensions(this.canvas, this.video, true);
+
+          // FaceAPI.draw.drawDetections(
+          //   this.canvas, FaceAPI.resizeResults(result, dimensions)
+          // );
+
+          this.shader.material.uniforms.bottom.value = bottom;
+          this.shader.material.uniforms.right.value = right;
+          this.shader.material.uniforms.left.value = left;
+          this.shader.material.uniforms.top.value = top;
         }
       });
 
-    this.shader.material.uniforms.time.value = delta;
+    // this.shader.material.uniforms.time.value = delta;
     this.texture.needsUpdate = true;
   }
 

@@ -58,7 +58,7 @@ export default class FaceMasking {
     this.renderer.setPixelRatio(window.devicePixelRatio || 1);
     this.renderer.setSize(this.width, this.height);
 
-    // document.body.appendChild(this.renderer.domElement);
+    document.body.appendChild(this.renderer.domElement);
 
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(new RenderPass(this.scene, this.camera));

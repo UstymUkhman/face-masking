@@ -2,21 +2,27 @@
 precision highp float;
 
 uniform sampler2D tDiffuse;
-uniform float time;
+// uniform float time;
+uniform float bottom;
+uniform float right;
+uniform float left;
+uniform float top;
 
 varying vec2 vUv;
 
 void main (void) {
   vec4 color = texture2D(tDiffuse, vUv);
 
-  // float xs = floor(gl_FragCoord.x / 1.0);
-  // float ys = floor(gl_FragCoord.y / 1.0);
+  // Switch UV.y coord in three.js:
+  float _top = abs(1.0 - bottom);
+  float _bottom = abs(1.0 - top);
 
-  // vec2 noisePosition = vec2(xs * time, ys * time);
-  // vec3 noiseColor = vec4(rand(noisePosition) * 1.0 * 2.0).rgb;
+  bool x = vUv.x > left && vUv.x < right;
+  bool y = vUv.y > _top && vUv.y < _bottom;
 
-  // color.rgb = mix(color.rgb, noiseColor, 1.0 / 4.0);
+  if (x && y) {
+    color = vec4(1.0);
+  }
 
-  // if (0.2 < vUv.x && vUv.x < 0.8) color = vec4(1.0);
   gl_FragColor = color;
 }
