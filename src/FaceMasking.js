@@ -30,7 +30,7 @@ export default class FaceMasking {
   }
 
   init () {
-    const texture = this.tracker.createVideoGeometry();
+    const texture = this.tracker.createGeometry();
     this.start.parentElement.classList.add('visible');
 
     this.scene.add(new Mesh(
@@ -39,6 +39,27 @@ export default class FaceMasking {
     ));
 
     this.start.parentElement.classList.add('visible');
+  }
+
+  async onStart (event) {
+    this.start.removeEventListener('click', this._onStart, false);
+    const container = event.target.parentElement;
+    container.classList.remove('visible');
+    this.video.play();
+
+    requestAnimationFrame(this.render.bind(this));
+  }
+
+  setSize () {
+    this.width = 640;
+    this.height = 480;
+
+    this.video.width = this.width;
+    this.video.height = this.height;
+
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+    this.ratio = this.width / this.height;
   }
 
   createScene () {
@@ -66,16 +87,18 @@ export default class FaceMasking {
 
   createTracker () {
     this.composer.addPass(new ShaderPass(CopyShader));
-
-    this.tracker = new Tracker(
-      this.video, this.canvas, {
-        height: this.height,
-        width: this.width
-      }
-    );
+    this.tracker = new Tracker(this.video, this.width, this.height);
 
     const shader = this.tracker.createShader();
     this.composer.addPass(shader);
+  }
+
+  createEvents () {
+    this._init = this.init.bind(this);
+    this._onStart = this.onStart.bind(this);
+
+    this.video.addEventListener('canplay', this._init, false);
+    this.start.addEventListener('click', this._onStart, false);
   }
 
   createStats () {
@@ -83,61 +106,17 @@ export default class FaceMasking {
     document.body.appendChild(this.stats.domElement);
   }
 
-  createEvents () {
-    this._init = this.init.bind(this);
-    this._onStart = this.onStart.bind(this);
-    this._onResize = this.onResize.bind(this);
-
-    window.addEventListener('resize', this._onResize, false);
-    this.video.addEventListener('canplay', this._init, false);
-    this.start.addEventListener('click', this._onStart, false);
-  }
-
-  render (delta) {
+  render () {
     this.stats.begin();
+    this.tracker.render();
     this.composer.render();
-    this.tracker.render(delta);
 
     this.raf = requestAnimationFrame(this.render.bind(this));
     this.stats.end();
   }
 
-  async onStart (event) {
-    this.start.removeEventListener('click', this._onStart, false);
-    const container = event.target.parentElement;
-    container.classList.remove('visible');
-    this.video.play();
-
-    requestAnimationFrame(this.render.bind(this));
-  }
-
-  setSize () {
-    // this.height = window.innerHeight * 0.9;
-    // this.width = this.height / 3 * 4;
-
-    this.width = 640;
-    this.height = 480;
-
-    this.video.width = this.width;
-    this.video.height = this.height;
-
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-    this.ratio = this.width / this.height;
-  }
-
-  onResize () {
-    this.setSize();
-    this.camera.aspect = this.ratio;
-    this.camera.updateProjectionMatrix();
-
-    this.tracker.resize(this.width, this.height);
-    this.renderer.setSize(this.width, this.height);
-  }
-
   destroy () {
     this.start.removeEventListener('click', this._onStart, false);
-    window.removeEventListener('resize', this._onResize, false);
 
     document.body.removeChild(this.renderer.domElement);
     document.body.removeChild(this.stats.domElement);

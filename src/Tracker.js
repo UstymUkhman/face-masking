@@ -4,18 +4,18 @@ import { ShaderPass } from '@postprocessing/ShaderPass';
 import { Texture } from '@three/textures/Texture';
 import { LinearFilter } from '@three/constants';
 import { Vector4 } from '@three/math/Vector4';
-import * as FaceAPI from 'face-api.js';
 
 import vertVideo from '@/glsl/video.vert';
 import fragVideo from '@/glsl/video.frag';
+import * as FaceAPI from 'face-api.js';
 
 export default class Tracker {
-  constructor (video, canvas, { width, height }) {
-    this.canvas = canvas;
-    this.video = video;
+  constructor (stream, width, height) {
+    this.width = width;
+    this.height = height;
+    this.stream = stream;
 
     this.createTracker();
-    this.resize(width, height);
   }
 
   async createTracker () {
@@ -49,12 +49,20 @@ export default class Tracker {
   }
 
   gumSuccess (stream) {
-    this.video.srcObject = stream;
-    this.video.onloadedmetadata = this.resize.call(this, this.width, this.height);
+    this.stream.srcObject = stream;
   }
 
   gumFail () {
-    console.error('D: Camera stream failed...');
+    console.error('Camera stream failed... D:');
+  }
+
+  createGeometry () {
+    this.texture = new Texture(this.stream);
+
+    this.texture.minFilter = LinearFilter;
+    this.texture.magFilter = LinearFilter;
+
+    return this.texture;
   }
 
   createShader () {
@@ -65,8 +73,8 @@ export default class Tracker {
 
         uniforms: {
           mask: { type: 'v4', value: new Vector4() },
+          size: { type: 'v4', value: new Vector4() },
           tDiffuse: { type: 't', value: null }
-          // time: { type: 'f', value: 0.0 }
         }
       })
     );
@@ -75,17 +83,8 @@ export default class Tracker {
     return this.shader;
   }
 
-  createVideoGeometry () {
-    this.texture = new Texture(this.video);
-
-    this.texture.minFilter = LinearFilter;
-    this.texture.magFilter = LinearFilter;
-
-    return this.texture;
-  }
-
-  render (delta) {
-    FaceAPI.detectSingleFace(this.video, this.options)
+  render () {
+    FaceAPI.detectSingleFace(this.stream, this.options)
       .then((result) => {
         if (result) {
           const { bottom, right, left, top } = result.relativeBox;
@@ -93,16 +92,14 @@ export default class Tracker {
           this.shader.material.uniforms.mask.value.set(
             Math.abs(1.0 - bottom), right, Math.abs(1.0 - top), left
           );
+
+          this.shader.material.uniforms.size.value.set(
+            0.0, 0.0, this.width, this.height
+          );
         }
       });
 
-    // this.shader.material.uniforms.time.value = delta;
     this.texture.needsUpdate = true;
-  }
-
-  resize (width, height) {
-    this.height = height;
-    this.width = width;
   }
 
   destroy () { }

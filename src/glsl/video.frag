@@ -2,18 +2,29 @@
 precision highp float;
 
 uniform sampler2D tDiffuse;
-// uniform float time;
+
 uniform vec4 mask;
+uniform vec4 size;
 
 varying vec2 vUv;
 
 void main (void) {
   vec4 color = texture2D(tDiffuse, vUv);
+  const float intensity = 10.0;
+  vec2 uv = vUv;
 
   if (vUv.y > mask.x && vUv.x < mask.y &&
       vUv.y < mask.z && vUv.x > mask.w
   ) {
-    color = vec4(1.0);
+    uv += size.xy;
+    uv *= size.zw;
+
+    uv = floor(uv / intensity) * intensity;
+
+    uv -= size.xy;
+    uv /= size.zw;
+
+    color = texture2D(tDiffuse, uv);
   }
 
   gl_FragColor = color;
