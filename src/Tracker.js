@@ -74,6 +74,7 @@ export default class Tracker {
         uniforms: {
           mask: { type: 'v4', value: new Vector4() },
           size: { type: 'v4', value: new Vector4() },
+          intensity: { type: 'f', value: 10.0 },
           tDiffuse: { type: 't', value: null }
         }
       })
@@ -83,6 +84,11 @@ export default class Tracker {
     return this.shader;
   }
 
+  setIntensity (intensity) {
+    this.shader.material.uniforms.intensity.value = intensity;
+    this.texture.needsUpdate = true;
+  }
+
   render () {
     FaceAPI.detectSingleFace(this.stream, this.options)
       .then((result) => {
@@ -90,7 +96,8 @@ export default class Tracker {
           const { bottom, right, left, top } = result.relativeBox;
 
           this.shader.material.uniforms.mask.value.set(
-            Math.abs(1.0 - bottom), right, Math.abs(1.0 - top), left
+            Math.abs(1.0 - bottom) + 0.1, right,
+            Math.abs(1.0 - top) + 0.1, left
           );
 
           this.shader.material.uniforms.size.value.set(

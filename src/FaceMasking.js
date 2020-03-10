@@ -14,10 +14,10 @@ import { Mesh } from '@three/objects/Mesh';
 import Tracker from '@/Tracker';
 
 export default class FaceMasking {
-  constructor (start, video, canvas) {
-    this.canvas = canvas;
+  constructor (start, video, range) {
     this.video = video;
     this.start = start;
+    this.range = range;
 
     this.setSize();
     this.createScene();
@@ -41,13 +41,19 @@ export default class FaceMasking {
     this.start.parentElement.classList.add('visible');
   }
 
-  async onStart (event) {
-    this.start.removeEventListener('click', this._onStart, false);
+  onStart (event) {
+    this.range.parentElement.classList.add('visible');
     const container = event.target.parentElement;
     container.classList.remove('visible');
+
     this.video.play();
 
     requestAnimationFrame(this.render.bind(this));
+    this.start.removeEventListener('click', this._onStart, false);
+  }
+
+  onInput (event) {
+    this.tracker.setIntensity(+event.target.value);
   }
 
   setSize () {
@@ -56,9 +62,6 @@ export default class FaceMasking {
 
     this.video.width = this.width;
     this.video.height = this.height;
-
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
     this.ratio = this.width / this.height;
   }
 
@@ -96,9 +99,11 @@ export default class FaceMasking {
   createEvents () {
     this._init = this.init.bind(this);
     this._onStart = this.onStart.bind(this);
+    this._onInput = this.onInput.bind(this);
 
     this.video.addEventListener('canplay', this._init, false);
     this.start.addEventListener('click', this._onStart, false);
+    this.range.addEventListener('input', this._onInput, false);
   }
 
   createStats () {

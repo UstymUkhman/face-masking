@@ -13,11 +13,15 @@ html, body {
   font-weight: 400;
   font-size: 16px;
 
-  background-color: #e1e1e1;
+  background-color: #000000;
   letter-spacing: normal;
   line-height: normal;
   overflow: hidden;
-  color: #000000;
+  color: #e1e1e1;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 
   height: 100%;
   width: 100%;
@@ -30,10 +34,7 @@ html, body {
 }
 
 video, canvas {
-  -webkit-transform: scaleX(-1);
-  -o-transform: scaleX(-1);
   transform: scaleX(-1);
-
   position: absolute;
   -ms-filter: fliph;
   display: block;
@@ -49,17 +50,14 @@ video, canvas {
 }
 
 div > canvas {
-  -webkit-transform: none;
-  -o-transform: none;
-  transform: none;
-
   position: relative;
   -ms-filter: none;
+  transform: none;
   filter: none;
 }
 
 div.start-container {
-  transition: opacity 0.5s;
+  transition: opacity 0.3s;
   pointer-events: none;
   position: absolute;
   display: block;
@@ -105,6 +103,126 @@ button {
 }
 
 button:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #e1e1e1;
   color: #000000;
+}
+
+div.intensity-container {
+  transition: opacity 0.3s 0.5s;
+  pointer-events: none;
+  position: absolute;
+
+  display: block;
+  margin: auto;
+  opacity: 0;
+
+  width: 250px;
+  height: 28px;
+
+  bottom: 5%;
+  right: 0;
+  left: 0;
+}
+
+div.intensity-container.visible {
+  pointer-events: all;
+  opacity: 1;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 20px;
+  appearance: none;
+  width: 100%;
+}
+
+input[type=range]:focus {
+  outline: 0;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  background-color: #e1e1e1;
+
+  border-radius: 20px;
+  cursor: pointer;
+
+  height: 4px;
+  width: 100%;
+  border: 0;
+}
+
+input[type=range]::-moz-range-track {
+  background-color: #e1e1e1;
+
+  border-radius: 20px;
+  cursor: pointer;
+
+  height: 4px;
+  width: 100%;
+  border: 0;
+}
+
+input[type=range]::-ms-fill-lower {
+  background-color: #e1e1e1;
+  border-radius: 40px;
+  cursor: pointer;
+  border: 0;
+}
+
+input[type=range]::-ms-fill-upper {
+  background-color: #e1e1e1;
+  border-radius: 40px;
+  cursor: pointer;
+  border: 0;
+}
+
+input[type=range]::-ms-track {
+  background-color: transparent;
+  border-color: transparent;
+  border-width: 0px;
+  cursor: pointer;
+
+  height: 4px;
+  width: 100%;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  background-color: #ffffff;
+  -webkit-appearance: none;
+  border-radius: 50%;
+  appearance: none;
+
+  margin-top: -4px;
+  cursor: pointer;
+
+  height: 12px;
+  width: 12px;
+  border: 0;
+}
+
+input[type=range]::-moz-range-thumb {
+  background-color: #ffffff;
+  -moz-appearance: none;
+  border-radius: 50%;
+  appearance: none;
+
+  margin-top: -4px;
+  cursor: pointer;
+
+  height: 12px;
+  width: 12px;
+  border: 0;
+}
+
+input[type=range]::-ms-thumb {
+  background-color: #ffffff;
+  border-radius: 50%;
+
+  margin-top: -4px;
+  cursor: pointer;
+
+  height: 12px;
+  width: 12px;
+  border: 0;
 }

@@ -9,6 +9,7 @@ pids
 .vscode
 
 build/*.map
+build/*.txt
 node_modules
 
 .lock-wscript
