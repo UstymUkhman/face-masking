@@ -13,7 +13,7 @@ import { Scene } from '@three/scenes/Scene';
 import { Mesh } from '@three/objects/Mesh';
 import Tracker from '@/Tracker';
 
-export default class FaceTracking {
+export default class FaceMasking {
   constructor (start, video, canvas) {
     this.canvas = canvas;
     this.video = video;
