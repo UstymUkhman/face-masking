@@ -3,6 +3,7 @@ import { ShaderPass } from '@postprocessing/ShaderPass';
 
 import { Texture } from '@three/textures/Texture';
 import { LinearFilter } from '@three/constants';
+import { Vector4 } from '@three/math/Vector4';
 import * as FaceAPI from 'face-api.js';
 
 import vertVideo from '@/glsl/video.vert';
@@ -63,12 +64,9 @@ export default class Tracker {
         vertexShader: vertVideo,
 
         uniforms: {
-          tDiffuse: { type: 't', value: null },
+          mask: { type: 'v4', value: new Vector4() },
+          tDiffuse: { type: 't', value: null }
           // time: { type: 'f', value: 0.0 }
-          bottom: { type: 'f', value: 0.8 },
-          right: { type: 'f', value: 0.8 },
-          left: { type: 'f', value: 0.0 },
-          top: { type: 'f', value: 0.0 }
         }
       })
     );
@@ -92,16 +90,9 @@ export default class Tracker {
         if (result) {
           const { bottom, right, left, top } = result.relativeBox;
 
-          // const dimensions = FaceAPI.matchDimensions(this.canvas, this.video, true);
-
-          // FaceAPI.draw.drawDetections(
-          //   this.canvas, FaceAPI.resizeResults(result, dimensions)
-          // );
-
-          this.shader.material.uniforms.bottom.value = bottom;
-          this.shader.material.uniforms.right.value = right;
-          this.shader.material.uniforms.left.value = left;
-          this.shader.material.uniforms.top.value = top;
+          this.shader.material.uniforms.mask.value.set(
+            Math.abs(1.0 - bottom), right, Math.abs(1.0 - top), left
+          );
         }
       });
 
