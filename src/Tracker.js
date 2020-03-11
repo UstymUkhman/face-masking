@@ -53,7 +53,7 @@ export default class Tracker {
   }
 
   gumFail () {
-    console.error('Camera stream failed... D:');
+    throw new Error('Camera stream failed.');
   }
 
   createGeometry () {
