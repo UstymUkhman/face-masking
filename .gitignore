@@ -1,3 +1,4 @@
+tmp
 logs
 *.log
 
@@ -8,6 +9,7 @@ pids
 .idea
 .vscode
 
+coverage
 build/*.map
 build/*.txt
 node_modules
