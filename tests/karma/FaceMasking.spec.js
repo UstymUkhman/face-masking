@@ -2,9 +2,9 @@ import { PerspectiveCamera } from '@three/cameras/PerspectiveCamera';
 import { EffectComposer } from '@postprocessing/EffectComposer';
 import { WebGLRenderer } from '@three/renderers/WebGLRenderer';
 
-import FaceMasking from '../src/FaceMasking';
 import { Scene } from '@three/scenes/Scene';
-import Tracker from '../src/Tracker';
+import FaceMasking from '@/FaceMasking';
+import Tracker from '@/Tracker';
 
 describe('FaceMasking', () => {
   const start = document.createElement('button');

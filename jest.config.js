@@ -168,7 +168,7 @@ module.exports = {
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: [
     '<rootDir>/tests/__mocks__/',
-    '<rootDir>/src/glsl/',
+    // '<rootDir>/src/glsl/',
     '/node_modules/'
   ],
 
@@ -194,7 +194,8 @@ module.exports = {
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: [
-    '/node_modules/(?!three).+\\.js$'
+    '/node_modules/(?!three).+\\.js$' // ,
+    // '<rootDir>/src/glsl/'
   ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them

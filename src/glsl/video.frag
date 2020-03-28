@@ -20,34 +20,34 @@ void main (void) {
 
   float distance = length(coord);
 
-  // if (vUv.y > mask.x && vUv.x < mask.y &&
-  //     vUv.y < mask.z && vUv.x > mask.w
-  // ) {
-  //   uv += size.xy;
-  //   uv *= size.zw;
+  if (vUv.y > mask.x && vUv.x < mask.y &&
+      vUv.y < mask.z && vUv.x > mask.w
+  ) {
+    uv += size.xy;
+    uv *= size.zw;
 
-  //   uv = floor(uv / intensity) * intensity;
+    uv = floor(uv / intensity) * intensity;
 
-  //   uv -= size.xy;
-  //   uv /= size.zw;
+    uv -= size.xy;
+    uv /= size.zw;
 
-  //   color = texture2D(tDiffuse, uv);
-  // }
-
-  if (distance < radius) {
-    float percent = (radius - distance) / radius;
-    float theta = percent * percent * angle;
-
-    float s = sin(theta);
-    float c = cos(theta);
-
-    coord = vec2(
-      coord.x * c - coord.y * s,
-      coord.x * s + coord.y * c
-    );
+    color = texture2D(tDiffuse, uv);
   }
 
-  coord += center;
-  // gl_FragColor = color;
-  gl_FragColor = texture2D(tDiffuse, coord / texSize);
+  // if (distance < radius) {
+  //   float percent = (radius - distance) / radius;
+  //   float theta = percent * percent * angle;
+
+  //   float s = sin(theta);
+  //   float c = cos(theta);
+
+  //   coord = vec2(
+  //     coord.x * c - coord.y * s,
+  //     coord.x * s + coord.y * c
+  //   );
+  // }
+
+  // coord += center;
+  gl_FragColor = color;
+  // gl_FragColor = texture2D(tDiffuse, coord / texSize);
 }

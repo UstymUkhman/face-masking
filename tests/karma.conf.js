@@ -1,4 +1,4 @@
-const webpackConfig = require('./webpack.config');
+const webpackConfig = require('../webpack.config');
 
 module.exports = function (config) {
   config.set({
@@ -17,13 +17,15 @@ module.exports = function (config) {
     autoWatchBatchDelay: 500,
     logLevel: config.LOG_INFO,
 
+    files: [ './karma/**/*.js' ],
     frameworks: ['mocha', 'chai'],
     browsers: ['Chrome', 'Firefox'],
     browserNoActivityTimeout: 60000,
-
-    files: [ 'tests/**/*.js' ],
     client: { captureConsole: true },
-    preprocessors: { 'tests/**/*.js': ['webpack'] },
+
+    preprocessors: {
+      './karma/**/*.js': ['webpack']
+    },
 
     webpack: {
       resolve: webpackConfig.resolve,

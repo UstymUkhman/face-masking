@@ -1,6 +1,6 @@
 import { ShaderPass } from '@postprocessing/ShaderPass';
 import { Texture } from '@three/textures/Texture';
-import Tracker from '../src/Tracker';
+import Tracker from '@/Tracker';
 
 describe('Tracker', () => {
   const video = document.createElement('video');
