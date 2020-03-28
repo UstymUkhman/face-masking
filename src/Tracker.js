@@ -4,6 +4,7 @@ import { ShaderPass } from '@postprocessing/ShaderPass';
 import { Texture } from '@three/textures/Texture';
 import { LinearFilter } from '@three/constants';
 import { Vector4 } from '@three/math/Vector4';
+import { Vector2 } from '@three/math/Vector2';
 
 import vertVideo from '@/glsl/video.vert';
 import fragVideo from '@/glsl/video.frag';
@@ -72,10 +73,13 @@ export default class Tracker {
         vertexShader: vertVideo,
 
         uniforms: {
+          center: { type: 'v2', value: new Vector2() },
           mask: { type: 'v4', value: new Vector4() },
           size: { type: 'v4', value: new Vector4() },
           intensity: { type: 'f', value: 10.0 },
-          tDiffuse: { type: 't', value: null }
+          tDiffuse: { type: 't', value: null },
+          radius: { type: 'f', value: 0.0 },
+          angle: { type: 'f', value: 5.0 }
         }
       })
     );
@@ -89,15 +93,36 @@ export default class Tracker {
     this.texture.needsUpdate = true;
   }
 
+  setAngle (angle) {
+    this.shader.material.uniforms.angle.value = angle;
+    this.texture.needsUpdate = true;
+  }
+
   render () {
     FaceAPI.detectSingleFace(this.stream, this.options)
       .then((result) => {
         if (result) {
-          const { bottom, right, left, top } = result.relativeBox;
+          const { width, height } = result.relativeBox;
+          const { right, left } = result.relativeBox;
+          let { bottom, top } = result.relativeBox;
+          const { x, y } = result.relativeBox;
+
+          bottom = Math.abs(1.0 - top) + 0.1;
+          top = Math.abs(1.0 - bottom) + 0.1;
+
+          const radius = Math.sqrt(
+            Math.pow(height / 2, 2) +
+            Math.pow(width / 2, 2)
+          );
+
+          this.shader.material.uniforms.radius.value = radius * 0.65;
+
+          this.shader.material.uniforms.center.value.set(
+            x + width / 2, (1.0 - y) - height / 2 - 0.05
+          );
 
           this.shader.material.uniforms.mask.value.set(
-            Math.abs(1.0 - bottom) + 0.1, right,
-            Math.abs(1.0 - top) + 0.1, left
+            top, right, bottom, left
           );
 
           this.shader.material.uniforms.size.value.set(

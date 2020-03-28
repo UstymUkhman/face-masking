@@ -1,9 +1,9 @@
 {
-  "name": "FaceMasking.github.io",
+  "name": "face-masking.github.io",
   "version": "0.1.0",
   "author": "Ustym Ukhman <ustym.ukhman@gmail.com>",
   "description": "Face Masking Experiment",
-  "homepage": "https://ustymukhman.github.io/FaceMasking.github.io/build/",
+  "homepage": "https://ustymukhman.github.io/face-masking.github.io/build/",
   "main": "src/main.js",
   "license": "WTFPL",
   "scripts": {

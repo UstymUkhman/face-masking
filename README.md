@@ -1,4 +1,4 @@
-# [Face Masking](https://ustymukhman.github.io/FaceMasking.github.io/build/) #
+# [face-masking](https://ustymukhman.github.io/face-masking.github.io/build/) #
 
 `yarn`
 
