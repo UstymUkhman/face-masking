@@ -55,7 +55,7 @@ module.exports = {
         name: path.posix.join('assets/sounds', '[name].[ext]')
       }
     }, {
-      test: /\.(glsl|vert|frag)$/i,
+      test: /\.(glsl|vert|frag|vs|fs)$/i,
       loader: 'threejs-glsl-loader'
     }, {
       test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,

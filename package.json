@@ -7,9 +7,9 @@
   "main": "src/main.js",
   "license": "WTFPL",
   "scripts": {
+    "test:jest": "./node_modules/.bin/jest --notify --config ./tests/jest.config.js",
     "test:karma": "./node_modules/karma/bin/karma start ./tests/karma.conf.js",
     "start": "webpack-dev-server --inline --progress",
-    "test:jest": "./node_modules/.bin/jest --notify",
     "test:jest:cover": "yarn test:jest --coverage",
     "server": "cd build && npx http-server",
     "build": "webpack --env build"

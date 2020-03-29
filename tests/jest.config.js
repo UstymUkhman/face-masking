@@ -87,8 +87,9 @@ module.exports = {
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/__mocks__/fileMock.js',
-    '\\.(css|less)$': '<rootDir>/tests/__mocks__/styleMock.js',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/jest/__mocks__/fileMock.js',
+    '\\.(glsl|vert|frag|vs|fs)$': '<rootDir>/tests/jest/__mocks__/shaderMock.js',
+    '\\.(css|scss|sass|less)$': '<rootDir>/tests/jest/__mocks__/styleMock.js',
 
     '^@postprocessing/(.*)': '<rootDir>/node_modules/three/examples/jsm/postprocessing/$1',
     '^@controls/(.*)': '<rootDir>/node_modules/three/examples/jsm/controls/$1',
@@ -131,11 +132,11 @@ module.exports = {
   // restoreMocks: false,
 
   // The root directory that Jest should scan for tests and modules within
-  // rootDir: undefined,
+  rootDir: '../',
 
   // A list of paths to directories that Jest should use to search for files in
   roots: [
-    '<rootDir>/tests/'
+    '<rootDir>/tests/jest/'
   ],
 
   // Allows you to use a custom runner instead of Jest's default test runner
@@ -161,14 +162,13 @@ module.exports = {
 
   // The glob patterns Jest uses to detect test files
   testMatch: [
-    '**/tests/**/*.[jt]s?(x)',
+    '**/tests/jest/**/*.[jt]s?(x)',
     '**/?(*.)+(spec|test).[tj]s?(x)'
   ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: [
-    '<rootDir>/tests/__mocks__/',
-    // '<rootDir>/src/glsl/',
+    '<rootDir>/tests/jest/__mocks__/',
     '/node_modules/'
   ],
 
@@ -194,8 +194,7 @@ module.exports = {
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: [
-    '/node_modules/(?!three).+\\.js$' // ,
-    // '<rootDir>/src/glsl/'
+    '/node_modules/(?!three).+\\.js$'
   ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them

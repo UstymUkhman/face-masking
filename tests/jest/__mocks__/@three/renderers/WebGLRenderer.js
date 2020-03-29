@@ -1,21 +1,16 @@
-// const setPixelRatio = jest.fn();
-// const setSize = jest.fn();
-// const render = jest.fn();
+import { WebGLRenderer } from '@three/renderers/WebGLRenderer';
 
-// const WebGLRenderer = jest.fn().mockImplementation(() => {
-//   const canvas = document.createElementNS('http://www.w3.org/1999/xhtml', 'canvas');
+jest.genMockFromModule('@three/renderers/WebGLRenderer');
+jest.mock('@three/renderers/WebGLRenderer');
 
-//   return {
-//     shadowMap: { enabled: false },
-//     setPixelRatio: setPixelRatio,
-//     domElement: canvas,
-//     setSize: setSize,
-//     render: render
-//   };
-// });
+const canvas = document.createElementNS('http://www.w3.org/1999/xhtml', 'canvas');
 
-// export {
-//   WebGLRenderer,
-//   setPixelRatio,
-//   render
-// };
+const mockWebGLRenderer = {
+  setPixelRatio: jest.fn(),
+  domElement: canvas,
+  setSize: jest.fn()
+};
+
+WebGLRenderer.mockImplementation(() => mockWebGLRenderer);
+
+export { WebGLRenderer };
