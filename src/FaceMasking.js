@@ -53,8 +53,7 @@ export default class FaceMasking {
   }
 
   onInput (event) {
-    this.tracker.setIntensity(+event.target.value);
-    // this.tracker.setAngle(+event.target.value);
+    this.tracker.setStrength(+event.target.value);
   }
 
   setSize () {

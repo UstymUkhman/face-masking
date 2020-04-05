@@ -73,13 +73,12 @@ export default class Tracker {
         vertexShader: vertVideo,
 
         uniforms: {
-          center: { type: 'v2', value: new Vector2() },
-          mask: { type: 'v4', value: new Vector4() },
-          size: { type: 'v4', value: new Vector4() },
-          intensity: { type: 'f', value: 10.0 },
-          tDiffuse: { type: 't', value: null },
-          radius: { type: 'f', value: 0.0 },
-          angle: { type: 'f', value: 5.0 }
+          center: { value: new Vector2() },
+          mask: { value: new Vector4() },
+          size: { value: new Vector2() },
+          strength: { value: 10.0 },
+          tDiffuse: { value: null },
+          radius: { value: 0.0 }
         }
       })
     );
@@ -88,13 +87,8 @@ export default class Tracker {
     return this.shader;
   }
 
-  setIntensity (intensity) {
-    this.shader.material.uniforms.intensity.value = intensity;
-    this.texture.needsUpdate = true;
-  }
-
-  setAngle (angle) {
-    this.shader.material.uniforms.angle.value = angle;
+  setStrength (strength) {
+    this.shader.material.uniforms.strength.value = strength;
     this.texture.needsUpdate = true;
   }
 
@@ -126,7 +120,7 @@ export default class Tracker {
           );
 
           this.shader.material.uniforms.size.value.set(
-            0.0, 0.0, this.width, this.height
+            this.width, this.height
           );
         }
       });
