@@ -11,6 +11,7 @@
     "test:karma": "./node_modules/karma/bin/karma start ./tests/karma.conf.js",
     "start": "webpack-dev-server --inline --progress",
     "test:jest:cover": "yarn test:jest --coverage",
+    "preinstall": "npx npm-force-resolutions",
     "server": "cd build && npx http-server",
     "build": "webpack --env build"
   },
@@ -54,6 +55,7 @@
     "mini-css-extract-plugin": "^0.9.0",
     "minimist": "^1.2.5",
     "mocha": "^7.1.1",
+    "npm-force-resolutions": "0.0.3",
     "style-loader": "^1.0.0",
     "stylelint-config-standard": "^20.0.0",
     "terser-webpack-plugin": "^2.3.5",
