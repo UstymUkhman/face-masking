@@ -6,8 +6,8 @@ import { LinearFilter } from '@three/constants';
 import { Vector4 } from '@three/math/Vector4';
 import { Vector2 } from '@three/math/Vector2';
 
-import vertVideo from '@/glsl/video.vert';
-import fragVideo from '@/glsl/video.frag';
+import vertMask from '@/glsl/mask.vert';
+import fragMask from '@/glsl/mask.frag';
 import * as FaceAPI from 'face-api.js';
 
 export default class Tracker {
@@ -69,8 +69,8 @@ export default class Tracker {
   createShader () {
     this.shader = new ShaderPass(
       new ShaderMaterial({
-        fragmentShader: fragVideo,
-        vertexShader: vertVideo,
+        fragmentShader: fragMask,
+        vertexShader: vertMask,
 
         uniforms: {
           center: { value: new Vector2() },

@@ -1,6 +1,7 @@
-#include ./ink.glsl;
-#include ./swirl.glsl;
-#include ./pixelate.glsl;
+#include ./effects/ink.glsl;
+#include ./effects/blur.glsl;
+#include ./effects/swirl.glsl;
+#include ./effects/pixelate.glsl;
 
 uniform sampler2D tDiffuse;
 uniform float strength;
@@ -13,9 +14,9 @@ uniform vec4 mask;
 varying vec2 vUv;
 
 void main (void) {
-  vec4 color = texture2D(tDiffuse, vUv);
+  gl_FragColor = blur(tDiffuse, mask, vUv, strength / 512.0);
 
-  gl_FragColor = pixelate(tDiffuse, mask, size, vUv, strength);
+  // gl_FragColor = pixelate(tDiffuse, mask, size, vUv, strength);
 
   // gl_FragColor = swirl(tDiffuse, vec2(
   //   size.x / size.x, size.y / size.x
