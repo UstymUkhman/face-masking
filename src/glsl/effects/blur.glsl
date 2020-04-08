@@ -1,5 +1,3 @@
-precision highp float;
-
 vec4 verticalBlur (sampler2D texture, vec2 uv, float amount) {
   vec4 sum = vec4(0.0);
 

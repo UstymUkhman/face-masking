@@ -111,12 +111,12 @@ export default class FaceMasking {
     document.body.appendChild(this.stats.domElement);
   }
 
-  render () {
+  render (delta) {
     this.stats.begin();
-    this.tracker.render();
     this.composer.render();
 
     this.raf = requestAnimationFrame(this.render.bind(this));
+    this.tracker.render(delta);
     this.stats.end();
   }
 

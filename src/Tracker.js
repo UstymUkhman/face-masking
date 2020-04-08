@@ -78,7 +78,8 @@ export default class Tracker {
           size: { value: new Vector2() },
           strength: { value: 10.0 },
           tDiffuse: { value: null },
-          radius: { value: 0.0 }
+          radius: { value: 0.0 },
+          time: { value: 0.0 }
         }
       })
     );
@@ -92,7 +93,7 @@ export default class Tracker {
     this.texture.needsUpdate = true;
   }
 
-  render () {
+  render (delta) {
     FaceAPI.detectSingleFace(this.stream, this.options)
       .then((result) => {
         if (result) {
@@ -110,6 +111,7 @@ export default class Tracker {
           );
 
           this.shader.material.uniforms.radius.value = radius * 0.65;
+          this.shader.material.uniforms.time.value = delta;
 
           this.shader.material.uniforms.center.value.set(
             x + width / 2, (1.0 - y) - height / 2 - 0.05
