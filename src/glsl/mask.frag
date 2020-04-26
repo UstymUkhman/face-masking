@@ -1,13 +1,16 @@
 precision highp float;
 
-#include ./effects/ink.glsl;
-#include ./effects/blur.glsl;
-#include ./effects/swirl.glsl;
-#include ./effects/noise.glsl;
-#include ./effects/pixelate.glsl;
-#include ./effects/blugePinch.glsl;
+// #include ./utils.glsl;
+// #include ./effects/ink.glsl;
+// #include ./effects/blur.glsl;
+// #include ./effects/swirl.glsl;
+// #include ./effects/noise.glsl;
+// #include ./effects/pixelate.glsl;
+#include ./effects/zoomBlur.glsl;
+// #include ./effects/blugePinch.glsl;
 
-#define MAX18 13.333333333333333
+#define MAX_BLUR  33.333333333333333
+#define MAX_NOISE 13.333333333333333
 
 uniform sampler2D tDiffuse;
 uniform float strength;
@@ -21,11 +24,13 @@ uniform vec4 mask;
 varying vec2 vUv;
 
 void main (void) {
-  gl_FragColor = blugePinch(tDiffuse, vec2(
-    size.x / size.x, size.y / size.x
-  ), vUv, vec2(center.x, center.y - 0.05), radius, (strength - 13.0) / 12.0);
+  gl_FragColor = zoomBlur(tDiffuse, mask, size, vUv, center, strength / MAX_BLUR);
 
-  // gl_FragColor = noise(tDiffuse, mask, vUv, (strength - 1.0) / MAX18, time);
+  // gl_FragColor = blugePinch(tDiffuse, vec2(
+  //   size.x / size.x, size.y / size.x
+  // ), vUv, vec2(center.x, center.y - 0.05), radius, (strength - 13.0) / 12.0);
+
+  // gl_FragColor = noise(tDiffuse, mask, vUv, (strength - 1.0) / MAX_NOISE, time);
 
   // gl_FragColor = blur(tDiffuse, mask, vUv, strength / 512.0);
 
