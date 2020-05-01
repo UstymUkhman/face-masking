@@ -5,8 +5,9 @@ precision highp float;
 // #include ./effects/blur.glsl;
 // #include ./effects/swirl.glsl;
 // #include ./effects/noise.glsl;
+#include ./effects/edgeWork.glsl;
 // #include ./effects/pixelate.glsl;
-#include ./effects/zoomBlur.glsl;
+// #include ./effects/zoomBlur.glsl;
 // #include ./effects/blugePinch.glsl;
 
 #define MAX_BLUR  33.333333333333333
@@ -24,7 +25,9 @@ uniform vec4 mask;
 varying vec2 vUv;
 
 void main (void) {
-  gl_FragColor = zoomBlur(tDiffuse, mask, size, vUv, center, strength / MAX_BLUR);
+  gl_FragColor = edgeWork(tDiffuse, mask, size, vUv, radius, strength);
+
+  // gl_FragColor = zoomBlur(tDiffuse, mask, size, vUv, center, strength / MAX_BLUR);
 
   // gl_FragColor = blugePinch(tDiffuse, vec2(
   //   size.x / size.x, size.y / size.x
