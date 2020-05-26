@@ -10,8 +10,8 @@ pids
 .vscode
 
 coverage
-build/*.map
-build/*.txt
+public/*.map
+public/*.txt
 node_modules
 
 .lock-wscript

@@ -1,8 +1,10 @@
-# [face-masking](https://ustymukhman.github.io/face-masking.github.io/build/) #
+# [face-masking](http://54.93.165.244/experiments/face-masking/) #
 
 `yarn`
 
 `yarn start`
+
+`yarn test:jest`
 
 `yarn build`
 
