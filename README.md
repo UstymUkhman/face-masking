@@ -12,20 +12,4 @@
 
 ### TODO: ###
 
-- *Dynamic Noise*
-
-- *Bulge / Pinch*
-
-- *Blur / Zoom Blur*
-
-##### [Maybe] #####
-
-- *(Ink)*
-
-- *(Edge Work)*
-
-- *(Dot Screen)*
-
 - *(Color Halftone)*
-
-- *(Hue / Saturation)*
