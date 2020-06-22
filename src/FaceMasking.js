@@ -31,20 +31,19 @@ export default class FaceMasking {
 
   init () {
     const texture = this.tracker.createGeometry();
-    this.start.parentElement.classList.add('visible');
+    this.start.classList.add('visible');
 
     this.scene.add(new Mesh(
       new PlaneGeometry(this.width, this.height, 1, 1),
       new MeshBasicMaterial({ map: texture })
     ));
 
-    this.start.parentElement.classList.add('visible');
+    this.start.classList.add('visible');
   }
 
   onStart (event) {
     this.range.parentElement.classList.add('visible');
-    const container = event.target.parentElement;
-    container.classList.remove('visible');
+    event.target.classList.remove('visible');
 
     this.video.play();
 

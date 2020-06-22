@@ -8,8 +8,4 @@
 
 `yarn build`
 
-`yarn server`
-
-### TODO: ###
-
-- *(Color Halftone)*
+`yarn serve`

@@ -28,7 +28,7 @@ uniform vec4 mask;
 varying vec2 vUv;
 
 void main (void) {
-  gl_FragColor = dotScreen(tDiffuse, mask, size, vUv, center, (strength + 3.0) / 2.0);
+  gl_FragColor = dotScreen(tDiffuse, mask, size, vUv, center, (strength + 5.0) / 2.0);
 
   // gl_FragColor = hueSaturation(tDiffuse, mask, vUv, (strength - 13.0) / 12.0);
 
