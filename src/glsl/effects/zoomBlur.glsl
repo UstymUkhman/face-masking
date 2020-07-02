@@ -1,5 +1,3 @@
-#include ./utils.glsl;
-
 vec4 zoomBlur (sampler2D texture, vec4 mask, vec2 size, vec2 uv, vec2 center, float strength) {
   const int MAX = 40;
   vec4 color = gl_FragColor;

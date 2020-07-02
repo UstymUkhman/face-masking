@@ -1,5 +1,3 @@
-#include ./utils.glsl;
-
 vec4 hueSaturation (sampler2D texture, vec4 mask, vec2 uv, float strength) {
   vec4 color = texture2D(texture, uv);
 

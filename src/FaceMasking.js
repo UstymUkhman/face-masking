@@ -6,7 +6,6 @@ import { WebGLRenderer } from '@three/renderers/WebGLRenderer';
 
 import { RenderPass } from '@postprocessing/RenderPass';
 import { ShaderPass } from '@postprocessing/ShaderPass';
-import Stats from 'three/examples/js/libs/stats.min';
 import { CopyShader } from '@shaders/CopyShader';
 
 import { Scene } from '@three/scenes/Scene';
@@ -14,9 +13,10 @@ import { Mesh } from '@three/objects/Mesh';
 import Tracker from '@/Tracker';
 
 export default class FaceMasking {
-  constructor (start, video, range) {
-    this.video = video;
+  constructor (masks, start, video, range) {
+    this.masks = masks;
     this.start = start;
+    this.video = video;
     this.range = range;
 
     this.setSize();
@@ -26,10 +26,10 @@ export default class FaceMasking {
 
     this.createTracker();
     this.createEvents();
-    this.createStats();
   }
 
   init () {
+    this.video.removeEventListener('canplay', this._init, false);
     const texture = this.tracker.createGeometry();
     this.start.classList.add('visible');
 
@@ -53,6 +53,10 @@ export default class FaceMasking {
 
   onInput (event) {
     this.tracker.setStrength(+event.target.value);
+  }
+
+  onChange (event) {
+    this.tracker.setMask(+event.target.value);
   }
 
   setSize () {
@@ -99,32 +103,25 @@ export default class FaceMasking {
     this._init = this.init.bind(this);
     this._onStart = this.onStart.bind(this);
     this._onInput = this.onInput.bind(this);
+    this._onChange = this.onChange.bind(this);
 
     this.video.addEventListener('canplay', this._init, false);
     this.start.addEventListener('click', this._onStart, false);
     this.range.addEventListener('input', this._onInput, false);
-  }
-
-  createStats () {
-    this.stats = new Stats();
-    document.body.appendChild(this.stats.domElement);
+    this.masks.addEventListener('change', this._onChange, false);
   }
 
   render (delta) {
-    this.stats.begin();
     this.composer.render();
-
-    this.raf = requestAnimationFrame(this.render.bind(this));
     this.tracker.render(delta);
-    this.stats.end();
+    this.raf = requestAnimationFrame(this.render.bind(this));
   }
 
   destroy () {
-    this.start.removeEventListener('click', this._onStart, false);
+    this.masks.removeEventListener('change', this._onChange, false);
+    this.range.removeEventListener('input', this._onInput, false);
 
     document.body.removeChild(this.renderer.domElement);
-    document.body.removeChild(this.stats.domElement);
-
     cancelAnimationFrame(this.raf);
     this.tracker.destroy();
 
@@ -133,6 +130,5 @@ export default class FaceMasking {
 
     delete this.camera;
     delete this.scene;
-    delete this.stats;
   }
 };

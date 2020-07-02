@@ -35,14 +35,14 @@ describe('Tracker', () => {
     expect(tracker.createShader()).toBeInstanceOf(ShaderPass);
   });
 
-  it('should update shader intensity', () => {
+  it('should update mask strength', () => {
     tracker.createShader();
     tracker.createGeometry();
 
-    tracker.setIntensity(0);
-    expect(tracker.shader.material.uniforms.intensity.value).toBe(0);
+    tracker.setStrength(0);
+    expect(tracker.shader.material.uniforms.strength.value).toBe(0);
 
-    tracker.setIntensity(25);
-    expect(tracker.shader.material.uniforms.intensity.value).toBe(25);
+    tracker.setStrength(25);
+    expect(tracker.shader.material.uniforms.strength.value).toBe(25);
   });
 });

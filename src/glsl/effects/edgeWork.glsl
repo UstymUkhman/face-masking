@@ -1,5 +1,3 @@
-#include ./utils.glsl;
-
 vec4 edgeWork (sampler2D texture, vec4 mask, vec2 size, vec2 uv, float radius, float strength) {
   if (uvInMask(mask, uv) && strength > 1.0) {
     vec2  color  = vec2(0.0);

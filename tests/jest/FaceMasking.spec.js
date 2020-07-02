@@ -4,23 +4,16 @@ import FaceMasking from '@/FaceMasking';
 import Tracker from '@/Tracker';
 
 describe('FaceMasking', () => {
+  const masks = document.createElement('select');
   const start = document.createElement('button');
   const video = document.createElement('video');
   const input = document.createElement('input');
 
-  let faceMasking = null;
+  const faceMasking = new FaceMasking(masks, start, video, input);
   input.type = 'range';
 
-  beforeEach(() => {
-    faceMasking = new FaceMasking(start, video, input);
-  });
-
-  afterEach(() => {
-    faceMasking.destroy();
-    faceMasking = null;
-  });
-
   it('should be created', () => {
+    expect(faceMasking).toHaveProperty('masks', masks);
     expect(faceMasking).toHaveProperty('start', start);
     expect(faceMasking).toHaveProperty('video', video);
     expect(faceMasking).toHaveProperty('range', input);
@@ -31,7 +24,6 @@ describe('FaceMasking', () => {
 
     expect(faceMasking.composer).toBeInstanceOf(Object);
     expect(faceMasking.tracker).toBeInstanceOf(Tracker);
-    expect(faceMasking).toHaveProperty('stats');
   });
 
   it('should set video size', () => {
@@ -46,13 +38,13 @@ describe('FaceMasking', () => {
     expect(faceMasking.ratio).toBeCloseTo(640 / 480, 0.1);
   });
 
-  it('should update shader intensity', () => {
+  it('should update mask strength', () => {
     faceMasking.tracker.createGeometry();
 
     faceMasking.onInput({ target: { value: '0' } });
-    expect(faceMasking.tracker.shader.material.uniforms.intensity.value).toBe(0);
+    expect(faceMasking.tracker.shader.material.uniforms.strength.value).toBe(0);
 
     faceMasking.onInput({ target: { value: '25' } });
-    expect(faceMasking.tracker.shader.material.uniforms.intensity.value).toBe(25);
+    expect(faceMasking.tracker.shader.material.uniforms.strength.value).toBe(25);
   });
 });

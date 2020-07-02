@@ -79,6 +79,7 @@ export default class Tracker {
           strength: { value: 10.0 },
           tDiffuse: { value: null },
           radius: { value: 0.0 },
+          effect: { value: 1 },
           time: { value: 0.0 }
         }
       })
@@ -90,6 +91,11 @@ export default class Tracker {
 
   setStrength (strength) {
     this.shader.material.uniforms.strength.value = strength;
+    this.texture.needsUpdate = true;
+  }
+
+  setMask (mask) {
+    this.shader.material.uniforms.effect.value = mask;
     this.texture.needsUpdate = true;
   }
 

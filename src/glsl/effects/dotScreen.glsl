@@ -1,5 +1,3 @@
-#include ./utils.glsl;
-
 vec4 dotScreen (sampler2D texture, vec4 mask, vec2 size, vec2 uv, vec2 center, float strength) {
   vec4 color = texture2D(texture, uv);
 

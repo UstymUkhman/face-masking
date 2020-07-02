@@ -123,6 +123,38 @@ div.intensity-container.visible {
   opacity: 1;
 }
 
+select#mask {
+  transition: background-color 250ms, color 250ms;
+  font-family: monospace, sans-serif;
+  background-color: #000;
+  border: solid 1px #0C0;
+  
+  position: absolute;
+  cursor: pointer;
+  display: block;
+  color: #0C0;
+
+  height: 30px;
+  width: 200px;
+
+  padding: 5px;
+  outline: 0;
+  
+  left: auto;
+  right: 0;
+}
+
+select#mask:hover {
+  background-color: #0C0;
+  color: #000;
+}
+
+select#mask option {
+  font-family: monospace, sans-serif;
+  background-color: #000;
+  color: #0C0;
+}
+
 input[type=range] {
   -webkit-appearance: none;
   -moz-appearance: none;
