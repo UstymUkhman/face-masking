@@ -4,16 +4,7 @@ import Tracker from '@/Tracker';
 
 describe('Tracker', () => {
   const video = document.createElement('video');
-  let tracker = null;
-
-  beforeEach(() => {
-    tracker = new Tracker(video, 640, 480);
-  });
-
-  afterEach(() => {
-    tracker.destroy();
-    tracker = null;
-  });
+  const tracker = new Tracker(video, 640, 480);
 
   it('should be created', () => {
     expect(tracker.width).to.equal(640);
@@ -35,6 +26,19 @@ describe('Tracker', () => {
     expect(tracker.createShader()).to.be.an.instanceof(ShaderPass);
   });
 
+  it('should update mask', () => {
+    tracker.createShader();
+    tracker.createGeometry();
+
+    expect(tracker.setMask(0)).to.satisfy(() => {
+      return tracker.shader.material.uniforms.effect.value === 0;
+    });
+
+    expect(tracker.setMask(9)).to.satisfy(() => {
+      return tracker.shader.material.uniforms.effect.value === 9;
+    });
+  });
+
   it('should update mask strength', () => {
     tracker.createShader();
     tracker.createGeometry();
@@ -45,6 +49,12 @@ describe('Tracker', () => {
 
     expect(tracker.setStrength(25)).to.satisfy(() => {
       return tracker.shader.material.uniforms.strength.value === 25;
+    });
+  });
+
+  it('should render', () => {
+    expect(tracker.render()).to.satisfy(() => {
+      return tracker.texture.needsUpdate === true;
     });
   });
 });

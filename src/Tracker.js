@@ -90,13 +90,13 @@ export default class Tracker {
     return this.shader;
   }
 
-  setStrength (strength) {
-    this.shader.material.uniforms.strength.value = strength;
+  setMask (mask) {
+    this.shader.material.uniforms.effect.value = mask;
     this.texture.needsUpdate = true;
   }
 
-  setMask (mask) {
-    this.shader.material.uniforms.effect.value = mask;
+  setStrength (strength) {
+    this.shader.material.uniforms.strength.value = strength;
     this.texture.needsUpdate = true;
   }
 

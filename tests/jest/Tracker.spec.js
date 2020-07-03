@@ -4,16 +4,9 @@ import Tracker from '@/Tracker';
 
 describe('Tracker', () => {
   const video = document.createElement('video');
-  let tracker = null;
+  const tracker = new Tracker(video, 640, 480);
 
-  beforeEach(() => {
-    tracker = new Tracker(video, 640, 480);
-  });
-
-  afterEach(() => {
-    tracker.destroy();
-    tracker = null;
-  });
+  global.alert = jest.fn();
 
   it('should be created', () => {
     expect(tracker.width).toEqual(640);
@@ -35,6 +28,17 @@ describe('Tracker', () => {
     expect(tracker.createShader()).toBeInstanceOf(ShaderPass);
   });
 
+  it('should update mask', () => {
+    tracker.createShader();
+    tracker.createGeometry();
+
+    tracker.setMask(0);
+    expect(tracker.shader.material.uniforms.effect.value).toBe(0);
+
+    tracker.setMask(9);
+    expect(tracker.shader.material.uniforms.effect.value).toBe(9);
+  });
+
   it('should update mask strength', () => {
     tracker.createShader();
     tracker.createGeometry();
@@ -44,5 +48,15 @@ describe('Tracker', () => {
 
     tracker.setStrength(25);
     expect(tracker.shader.material.uniforms.strength.value).toBe(25);
+  });
+
+  it('should render', () => {
+    const spy = jest.spyOn(tracker, 'render');
+    const render = tracker.render();
+
+    expect(spy).toHaveBeenCalled();
+    expect(render).toBe(undefined);
+
+    spy.mockRestore();
   });
 });

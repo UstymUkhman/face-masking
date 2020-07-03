@@ -38,6 +38,16 @@ describe('FaceMasking', () => {
     expect(faceMasking.ratio).toBeCloseTo(640 / 480, 0.1);
   });
 
+  it('should update mask', () => {
+    faceMasking.tracker.createGeometry();
+
+    faceMasking.onChange({ target: { value: '0' } });
+    expect(faceMasking.tracker.shader.material.uniforms.effect.value).toBe(0);
+
+    faceMasking.onChange({ target: { value: '9' } });
+    expect(faceMasking.tracker.shader.material.uniforms.effect.value).toBe(9);
+  });
+
   it('should update mask strength', () => {
     faceMasking.tracker.createGeometry();
 
@@ -46,5 +56,29 @@ describe('FaceMasking', () => {
 
     faceMasking.onInput({ target: { value: '25' } });
     expect(faceMasking.tracker.shader.material.uniforms.strength.value).toBe(25);
+  });
+
+  it('should render', () => {
+    faceMasking.composer.render = jest.fn();
+    const trackerSpy = jest.spyOn(faceMasking.tracker, 'render');
+    const faceMaskingSpy = jest.spyOn(faceMasking, 'render');
+    const render = faceMasking.render();
+
+    expect(faceMaskingSpy).toHaveBeenCalled();
+    expect(trackerSpy).toHaveBeenCalled();
+    expect(render).toBe(undefined);
+
+    faceMaskingSpy.mockRestore();
+    trackerSpy.mockRestore();
+  });
+
+  it('should destroy', () => {
+    const spy = jest.spyOn(faceMasking, 'destroy');
+    const destroy = faceMasking.destroy();
+
+    expect(spy).toHaveBeenCalled();
+    expect(destroy).toBe(undefined);
+
+    spy.mockRestore();
   });
 });

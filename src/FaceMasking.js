@@ -52,12 +52,12 @@ export default class FaceMasking {
     requestAnimationFrame(this.render.bind(this));
   }
 
-  onInput (event) {
-    this.tracker.setStrength(+event.target.value);
-  }
-
   onChange (event) {
     this.tracker.setMask(+event.target.value);
+  }
+
+  onInput (event) {
+    this.tracker.setStrength(+event.target.value);
   }
 
   setSize () {
