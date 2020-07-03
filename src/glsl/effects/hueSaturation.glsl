@@ -1,5 +1,5 @@
-vec4 hueSaturation (sampler2D texture, vec4 mask, vec2 uv, float strength) {
-  vec4 color = texture2D(texture, uv);
+vec4 hueSaturation (sampler2D diffuse, vec4 mask, vec2 uv, float strength) {
+  vec4 color = texture(diffuse, uv);
 
   if (uvInMask(mask, uv)) {
     float hue = strength * PI;

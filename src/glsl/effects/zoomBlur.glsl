@@ -1,4 +1,4 @@
-vec4 zoomBlur (sampler2D texture, vec4 mask, vec2 size, vec2 uv, vec2 center, float strength) {
+vec4 zoomBlur (sampler2D diffuse, vec4 mask, vec2 size, vec2 uv, vec2 center, float strength) {
   const int MAX = 40;
   vec4 color = gl_FragColor;
 
@@ -13,10 +13,10 @@ vec4 zoomBlur (sampler2D texture, vec4 mask, vec2 size, vec2 uv, vec2 center, fl
     for (int i = 0; i <= MAX; i++) {
       float percent = (float(i) + offset) / float(MAX);
       float weight = 4.0 * (percent - percent * percent);
-      vec4 sample = texture2D(texture, uv + center * percent * strength / size);
+      vec4 colorSample = texture(diffuse, uv + center * percent * strength / size);
 
-      sample.rgb *= sample.a;
-      amount += sample * weight;
+      colorSample.rgb *= colorSample.a;
+      amount += colorSample * weight;
       total += weight;
     }
 

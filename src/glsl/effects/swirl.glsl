@@ -1,4 +1,4 @@
-vec4 swirl (sampler2D texture, vec2 size, vec2 uv, vec2 center, float radius, float strength) {
+vec4 swirl (sampler2D diffuse, vec2 size, vec2 uv, vec2 center, float radius, float strength) {
   vec2 ratio = vec2(size.x / size.x, size.y / size.x);
   vec2 coord = uv * ratio - center;
   float distance = length(coord);
@@ -17,5 +17,5 @@ vec4 swirl (sampler2D texture, vec2 size, vec2 uv, vec2 center, float radius, fl
   }
 
   coord += center;
-  return texture2D(texture, coord / ratio);
+  return texture(diffuse, coord / ratio);
 }

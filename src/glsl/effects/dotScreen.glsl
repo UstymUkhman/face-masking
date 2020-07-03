@@ -1,5 +1,5 @@
-vec4 dotScreen (sampler2D texture, vec4 mask, vec2 size, vec2 uv, vec2 center, float strength) {
-  vec4 color = texture2D(texture, uv);
+vec4 dotScreen (sampler2D diffuse, vec4 mask, vec2 size, vec2 uv, vec2 center, float strength) {
+  vec4 color = texture(diffuse, uv);
 
   if (uvInMask(mask, uv)) {
     vec2 coord = uv * size - center;

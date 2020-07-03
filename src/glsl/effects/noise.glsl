@@ -1,9 +1,7 @@
-vec4 noise (sampler2D texture, vec4 mask, vec2 uv, float strength, float time) {
-  vec4 color = texture2D(texture, uv);
+vec4 noise (sampler2D diffuse, vec4 mask, vec2 uv, float strength, float time) {
+  vec4 color = texture(diffuse, uv);
 
-  if (uv.y > mask.x && uv.x < mask.y &&
-    uv.y < mask.z && uv.x > mask.w
-  ) {
+  if (uvInMask(mask, uv)) {
     float xs = floor(gl_FragCoord.x / 1.0);
     float ys = floor(gl_FragCoord.y / 1.0);
 

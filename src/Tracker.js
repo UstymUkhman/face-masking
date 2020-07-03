@@ -54,6 +54,7 @@ export default class Tracker {
   }
 
   gumFail () {
+    alert('You need a webcam in order to run this experiment.');
     throw new Error('Camera stream failed.');
   }
 
@@ -105,6 +106,7 @@ export default class Tracker {
         if (result) {
           const { width, height } = result.relativeBox;
           const { right, left } = result.relativeBox;
+
           let { bottom, top } = result.relativeBox;
           const { x, y } = result.relativeBox;
 
@@ -135,6 +137,4 @@ export default class Tracker {
 
     this.texture.needsUpdate = true;
   }
-
-  destroy () { }
 }

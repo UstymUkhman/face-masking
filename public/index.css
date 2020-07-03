@@ -28,7 +28,6 @@ html, body {
 
   padding: 0;
   margin: 0;
-
   left: 0;
   top: 0;
 }
@@ -57,13 +56,14 @@ div > canvas {
 }
 
 button#start {
-  transition: background-color 0.5s, opacity 0.5s 0.5s, color 0.5s;
+  transition: background-color 0.5s, opacity 0.5s, color 0.5s;
   font-family: monospace, sans-serif;
   background-color: #000000;
   border: solid 1px #00CC00;
   text-transform: uppercase;
 
   text-decoration: none;
+  pointer-events: none;
   letter-spacing: 2px;
   text-align: center;
 
@@ -91,12 +91,14 @@ button#start {
 }
 
 button#start:hover {
+  transition-delay: 0s !important;
   background-color: #00CC00;
-  transition-delay: 0s;
   color: #000000;
 }
 
 button#start.visible {
+  transition-delay: 500ms;
+  pointer-events: all;
   cursor: pointer;
   opacity: 1;
 }
@@ -124,13 +126,12 @@ div.intensity-container.visible {
 }
 
 select#mask {
-  transition: background-color 250ms, color 250ms;
+  transition: background-color 250ms, color 250ms, opacity 0.5s;
   font-family: monospace, sans-serif;
   background-color: #000;
   border: solid 1px #0C0;
   
   position: absolute;
-  cursor: pointer;
   display: block;
   color: #0C0;
 
@@ -138,8 +139,9 @@ select#mask {
   width: 200px;
 
   padding: 5px;
+  opacity: 0;
   outline: 0;
-  
+
   left: auto;
   right: 0;
 }
@@ -147,6 +149,12 @@ select#mask {
 select#mask:hover {
   background-color: #0C0;
   color: #000;
+}
+
+select#mask.visible {
+  transition-delay: 500ms;
+  cursor: pointer;
+  opacity: 1;
 }
 
 select#mask option {

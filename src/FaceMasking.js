@@ -1,5 +1,6 @@
 import { MeshBasicMaterial } from '@three/materials/MeshBasicMaterial';
 import { PerspectiveCamera } from '@three/cameras/PerspectiveCamera';
+
 import { EffectComposer } from '@postprocessing/EffectComposer';
 import { PlaneGeometry } from '@three/geometries/PlaneGeometry';
 import { WebGLRenderer } from '@three/renderers/WebGLRenderer';
@@ -37,18 +38,18 @@ export default class FaceMasking {
       new PlaneGeometry(this.width, this.height, 1, 1),
       new MeshBasicMaterial({ map: texture })
     ));
-
-    this.start.classList.add('visible');
   }
 
   onStart (event) {
+    this.start.removeEventListener('click', this._onStart, false);
     this.range.parentElement.classList.add('visible');
+
     event.target.classList.remove('visible');
+    this.start.classList.remove('visible');
+    this.masks.classList.add('visible');
 
     this.video.play();
-
     requestAnimationFrame(this.render.bind(this));
-    this.start.removeEventListener('click', this._onStart, false);
   }
 
   onInput (event) {
@@ -75,9 +76,7 @@ export default class FaceMasking {
   createCamera () {
     this.camera = new PerspectiveCamera(45, this.ratio, 0.1, 1000);
     const z = Math.round(this.height / 0.8275862);
-
     this.camera.position.set(0, 0, z);
-    window.camera = this.camera;
   }
 
   createRenderer () {
@@ -120,14 +119,11 @@ export default class FaceMasking {
   destroy () {
     this.masks.removeEventListener('change', this._onChange, false);
     this.range.removeEventListener('input', this._onInput, false);
-
     document.body.removeChild(this.renderer.domElement);
     cancelAnimationFrame(this.raf);
-    this.tracker.destroy();
 
     delete this.renderer;
     delete this.tracker;
-
     delete this.camera;
     delete this.scene;
   }
