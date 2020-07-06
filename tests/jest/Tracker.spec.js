@@ -51,12 +51,8 @@ describe('Tracker', () => {
   });
 
   it('should render', () => {
-    const spy = jest.spyOn(tracker, 'render');
-    const render = tracker.render();
-
-    expect(spy).toHaveBeenCalled();
-    expect(render).toBe(undefined);
-
-    spy.mockRestore();
+    const version = tracker.texture.version;
+    tracker.render();
+    expect(tracker.texture.version).toBe(version + 1);
   });
 });

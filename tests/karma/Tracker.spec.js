@@ -53,8 +53,8 @@ describe('Tracker', () => {
   });
 
   it('should render', () => {
-    expect(tracker.render()).to.satisfy(() => {
-      return tracker.texture.needsUpdate === true;
-    });
+    const version = tracker.texture.version;
+    tracker.render();
+    expect(tracker.texture).to.have.own.property('version', version + 1);
   });
 });

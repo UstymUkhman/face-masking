@@ -27,7 +27,6 @@ describe('FaceMasking', () => {
 
     expect(faceMasking.composer).to.be.an.instanceof(EffectComposer);
     expect(faceMasking.tracker).to.be.an.instanceof(Tracker);
-    expect(faceMasking).to.have.own.property('stats');
   });
 
   it('should set video size', () => {
@@ -42,6 +41,18 @@ describe('FaceMasking', () => {
     expect(faceMasking.ratio).to.closeTo(640 / 480, 0.1);
   });
 
+  it('should update mask', () => {
+    faceMasking.tracker.createGeometry();
+
+    expect(faceMasking.onChange({ target: { value: '0' } })).to.satisfy(() => {
+      return faceMasking.tracker.shader.material.uniforms.effect.value === 0;
+    });
+
+    expect(faceMasking.onChange({ target: { value: '9' } })).to.satisfy(() => {
+      return faceMasking.tracker.shader.material.uniforms.effect.value === 9;
+    });
+  });
+
   it('should update mask strength', () => {
     faceMasking.tracker.createGeometry();
 
@@ -52,5 +63,18 @@ describe('FaceMasking', () => {
     expect(faceMasking.onInput({ target: { value: '25' } })).to.satisfy(() => {
       return faceMasking.tracker.shader.material.uniforms.strength.value === 25;
     });
+  });
+
+  it('should render', () => {
+    faceMasking.render();
+  });
+
+  it('should destroy', () => {
+    faceMasking.destroy();
+
+    expect(faceMasking).not.to.have.own.property('renderer');
+    expect(faceMasking).not.to.have.own.property('tracker');
+    expect(faceMasking).not.to.have.own.property('camera');
+    expect(faceMasking).not.to.have.own.property('scene');
   });
 });

@@ -2,12 +2,14 @@
 
 > *Big thanks to [evanw](https://github.com/evanw) and he's [glfx.js](https://evanw.github.io/glfx.js/demo/) library from which were adapted most of the mask effets.*
 
-`yarn`
+![](./public/preview.gif)
 
-`yarn start`
+`npm i --save`
 
-`yarn test:jest`
+`npm run start`
 
-`yarn build`
+`npm run test:jest`
 
-`yarn serve`
+`npm run build`
+
+`npm run serve`

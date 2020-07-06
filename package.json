@@ -11,6 +11,7 @@
     "test:karma": "./node_modules/karma/bin/karma start ./tests/karma.conf.js",
     "start": "webpack-dev-server --inline --progress",
     "test:jest:cover": "yarn test:jest --coverage",
+    "preinstall": "npx npm-force-resolutions",
     "build": "webpack --env build",
     "serve": "npx http-server"
   },
