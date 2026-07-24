@@ -19,7 +19,7 @@
     "animejs": "^3.2.0",
     "await-to-js": "^2.1.1",
     "face-api.js": "^0.22.1",
-    "three": "^0.118.3"
+    "three": "^0.137.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.7",
